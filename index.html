@@ -15,87 +15,62 @@
 
         body {
             margin: 0;
-            font-family: Arial, sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background-color: var(--dark-bg);
             color: var(--light-text);
-            line-height: 1.6;
+            overflow-x: hidden;
         }
 
         header {
             background: linear-gradient(135deg, var(--primary-orange), var(--primary-blue));
             color: var(--light-text);
-            padding: 20px;
+            padding: 40px 20px;
             text-align: center;
+            border-bottom: 3px solid var(--accent);
         }
 
         header h1 {
             margin: 0;
-            font-size: 2.5em;
+            font-size: 3em;
+            letter-spacing: 2px;
+            text-transform: uppercase;
         }
 
-        nav {
-            display: flex;
-            justify-content: center;
-            background-color: var(--dark-bg);
-            padding: 10px;
-            border-top: 2px solid var(--accent);
-        }
-
-        nav a {
-            color: var(--light-text);
-            margin: 0 15px;
-            text-decoration: none;
-            font-size: 1.1em;
-        }
-
-        nav a:hover {
-            color: var(--primary-orange);
+        header p {
+            font-size: 1.2em;
+            margin-top: 10px;
         }
 
         .content {
-            padding: 20px;
             display: flex;
             flex-wrap: wrap;
-            gap: 20px;
             justify-content: center;
+            gap: 20px;
+            padding: 40px 20px;
         }
 
         .card {
             background-color: #1e1e1e;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            width: 300px;
-            overflow: hidden;
+            border-radius: 12px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+            width: 320px;
+            padding: 20px;
+            text-align: center;
             position: relative;
             cursor: pointer;
-            transition: transform 0.3s, background-color 0.3s;
+            overflow: hidden;
+            transition: transform 0.4s ease, background-color 0.3s ease;
         }
 
         .card:hover {
-            transform: translateY(-10px);
-            background-color: var(--primary-blue);
-        }
-
-        .card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(135deg, transparent, var(--primary-orange));
-            opacity: 0;
-            transition: opacity 0.3s;
-        }
-
-        .card:hover::before {
-            opacity: 0.2;
+            transform: translateY(-10px) scale(1.02);
+            background: linear-gradient(135deg, var(--primary-orange), var(--primary-blue));
         }
 
         .card h3 {
             color: var(--primary-orange);
-            margin: 15px;
-            transition: color 0.3s;
+            margin: 15px 0 10px;
+            transition: color 0.3s ease;
         }
 
         .card:hover h3 {
@@ -103,45 +78,36 @@
         }
 
         .card p {
-            margin: 0 15px 15px;
+            color: #bbb;
+            font-size: 1em;
+            margin: 0 0 15px;
+        }
+
+        .button {
+            display: inline-block;
+            padding: 10px 20px;
+            font-size: 1em;
+            color: var(--light-text);
+            background-color: var(--primary-orange);
+            border: none;
+            border-radius: 8px;
+            text-decoration: none;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        .button:hover {
+            background-color: var(--primary-blue);
+            transform: scale(1.1);
         }
 
         footer {
             text-align: center;
-            padding: 10px;
-            background: var(--dark-bg);
-            color: var(--light-text);
-            border-top: 2px solid var(--accent);
-            margin-top: 20px;
-        }
-
-        .game-panel {
-            background-color: #1e1e1e;
             padding: 20px;
-            border-radius: 10px;
-            width: calc(100% - 40px);
-            max-width: 600px;
-            text-align: center;
-            transition: background-color 0.3s, transform 0.3s;
-        }
-
-        .game-panel:hover {
-            background-color: var(--primary-orange);
-            transform: scale(1.05);
-        }
-
-        .game-panel h2 {
-            margin: 0 0 10px;
-            color: var(--primary-blue);
-            transition: color 0.3s;
-        }
-
-        .game-panel:hover h2 {
+            background-color: #1a1a1a;
+            border-top: 3px solid var(--accent);
             color: var(--light-text);
-        }
-
-        .game-panel p {
-            margin: 0;
+            font-size: 0.9em;
         }
     </style>
 </head>
@@ -151,50 +117,41 @@
         <p>Your ultimate destination for games, blogs, and fun!</p>
     </header>
 
-    <nav>
-        <a href="#">Home</a>
-        <a href="#">Games</a>
-        <a href="#">Blog</a>
-        <a href="#">About</a>
-        <a href="#">Contact</a>
-    </nav>
-
     <section class="content">
-        <a href="game1.html">
-            <div class="card">
-                <h3>Game 1</h3>
-                <p>A fast-paced adventure that will keep you on the edge of your seat.</p>
-            </div>
-        </a>
-        <a href="game2.html">
-            <div class="card">
-                <h3>Game 2</h3>
-                <p>Explore a vast open world and uncover hidden secrets.</p>
-            </div>
-        </a>
-        <a href="game3.html">
-            <div class="card">
-                <h3>Game 3</h3>
-                <p>A multiplayer extravaganza with endless replayability.</p>
-            </div>
-        </a>
-        <a href="game4.html">
-            <div class="game-panel">
-                <h2>Exclusive Game Panel</h2>
-                <p>Dive into an immersive experience like no other.</p>
-            </div>
-        </a>
-        <a href="game5.html">
-            <div class="game-panel">
-                <h2>Featured Tournament</h2>
-                <p>Join now and show your skills to the world!</p>
-            </div>
-        </a>
+        <div class="card" onclick="window.location.href='game1.html'">
+            <h3>Game 1</h3>
+            <p>A fast-paced adventure that will keep you on the edge of your seat.</p>
+            <button class="button">Play Now</button>
+        </div>
+
+        <div class="card" onclick="window.location.href='game2.html'">
+            <h3>Game 2</h3>
+            <p>Explore a vast open world and uncover hidden secrets.</p>
+            <button class="button">Play Now</button>
+        </div>
+
+        <div class="card" onclick="window.location.href='game3.html'">
+            <h3>Game 3</h3>
+            <p>A multiplayer extravaganza with endless replayability.</p>
+            <button class="button">Play Now</button>
+        </div>
+
+        <div class="card" onclick="window.location.href='game4.html'">
+            <h3>Game 4</h3>
+            <p>Engage in strategic challenges and rise to the top!</p>
+            <button class="button">Play Now</button>
+        </div>
+
+        <div class="card" onclick="window.location.href='game5.html'">
+            <h3>Game 5</h3>
+            <p>Join the tournament and showcase your skills to the world.</p>
+            <button class="button">Play Now</button>
+        </div>
     </section>
 
     <footer>
         <p>&copy; 2025 GameVerse. All rights reserved.</p>
-        <p>Designed with love and code.</p>
+        <p>Designed with passion and precision.</p>
     </footer>
 </body>
 </html>
