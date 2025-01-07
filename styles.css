@@ -1,16 +1,28 @@
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
 :root {
-    --primary-color: #4CAF50;
-    --secondary-color: #333;
+    --primary-color: #ff6f61;
+    --secondary-color: #1a1a1a;
+    --accent-color: #ffd700;
     --light-color: #f4f4f4;
-    --dark-color: #222;
-    --font-family: 'Arial', sans-serif;
+    --dark-color: #0d0d0d;
+    --font-family: 'Verdana', sans-serif;
 }
 
 body {
     margin: 0;
     font-family: var(--font-family);
-    color: var(--secondary-color);
-    background: var(--light-color);
+    background: var(--dark-color);
+    color: var(--light-color);
     line-height: 1.6;
 }
 
@@ -21,15 +33,17 @@ body {
 }
 
 header {
-    background: var(--dark-color);
-    color: var(--light-color);
+    background: var(--secondary-color);
     padding: 1rem 0;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    animation: fadeIn 1s ease-in-out;
 }
 
 header .logo {
-    font-size: 1.5rem;
-    text-transform: uppercase;
-    color: var(--primary-color);
+    font-size: 1.8rem;
+    color: var(--accent-color);
     text-decoration: none;
 }
 
@@ -49,31 +63,45 @@ header .nav-links a {
     color: var(--light-color);
     text-decoration: none;
     font-size: 1rem;
+    transition: color 0.3s;
+}
+
+header .nav-links a:hover {
+    color: var(--accent-color);
 }
 
 .hero {
     text-align: center;
-    background: var(--primary-color);
-    color: var(--light-color);
-    padding: 3rem 0;
+    background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+    color: var(--dark-color);
+    padding: 4rem 0;
+    animation: fadeIn 1.5s ease-in-out;
 }
 
 .hero h1 {
-    font-size: 2.5rem;
+    font-size: 3rem;
     margin-bottom: 1rem;
 }
 
 .hero p {
-    font-size: 1.2rem;
+    font-size: 1.5rem;
     margin-bottom: 2rem;
 }
 
 .hero .btn {
-    background: var(--light-color);
-    color: var(--primary-color);
-    padding: 0.5rem 1rem;
+    background: var(--dark-color);
+    color: var(--light-color);
+    padding: 0.8rem 1.5rem;
     text-decoration: none;
-    border-radius: 5px;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: background 0.3s, transform 0.3s;
+}
+
+.hero .btn:hover {
+    background: var(--light-color);
+    color: var(--dark-color);
+    transform: scale(1.1);
 }
 
 section {
@@ -86,17 +114,34 @@ section {
     gap: 1.5rem;
 }
 
-.card {
-    background: var(--light-color);
+.game-card {
+    background: var(--secondary-color);
     padding: 1rem;
-    border: 1px solid var(--secondary-color);
-    border-radius: 5px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    text-align: center;
+    overflow: hidden;
+    animation: fadeIn 1s ease-in-out;
+}
+
+.game-card img {
+    width: 100%;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+    transition: transform 0.3s;
+}
+
+.game-card img:hover {
+    transform: scale(1.05);
+}
+
+.game-card h3 {
+    font-size: 1.5rem;
+    color: var(--accent-color);
 }
 
 footer {
     text-align: center;
-    background: var(--dark-color);
+    background: var(--secondary-color);
     color: var(--light-color);
     padding: 1rem 0;
     margin-top: 2rem;
