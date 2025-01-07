@@ -1,157 +1,190 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>GameVerse</title>
     <style>
-        :root {
-            --primary-orange: #ff8800;
-            --primary-blue: #0055ff;
-            --dark-bg: #121212;
-            --light-text: #f0f0f0;
-            --accent: #ffaa00;
-        }
+      :root {
+        --primary-orange: #ff8800;
+        --primary-blue: #0055ff;
+        --dark-bg: #121212;
+        --light-text: #f0f0f0;
+        --accent: #ffaa00;
+      }
 
-        body {
-            margin: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: var(--dark-bg);
-            color: var(--light-text);
-            overflow-x: hidden;
-        }
+      body {
+        margin: 0;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background-color: var(--dark-bg);
+        color: var(--light-text);
+        overflow-x: hidden;
+      }
 
-        header {
-            background: linear-gradient(135deg, var(--primary-orange), var(--primary-blue));
-            color: var(--light-text);
-            padding: 40px 20px;
-            text-align: center;
-            border-bottom: 3px solid var(--accent);
-        }
+      header {
+        background: linear-gradient(
+          135deg,
+          var(--primary-orange),
+          var(--primary-blue)
+        );
+        color: var(--light-text);
+        padding: 40px 20px;
+        text-align: center;
+        border-bottom: 3px solid var(--accent);
+      }
 
-        header h1 {
-            margin: 0;
-            font-size: 3em;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-        }
+      header h1 {
+        margin: 0;
+        font-size: 3em;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+      }
 
-        header p {
-            font-size: 1.2em;
-            margin-top: 10px;
-        }
+      header p {
+        font-size: 1.2em;
+        margin-top: 10px;
+      }
 
-        .content {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 20px;
-            padding: 40px 20px;
-        }
+      .content {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 20px;
+        padding: 40px 20px;
+      }
 
-        .card {
-            background-color: #1e1e1e;
-            border-radius: 12px;
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
-            width: 320px;
-            padding: 20px;
-            text-align: center;
-            position: relative;
-            cursor: pointer;
-            overflow: hidden;
-            transition: transform 0.4s ease, background-color 0.3s ease;
-        }
+      .card {
+        background-color: #1e1e1e;
+        border-radius: 12px;
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+        width: 640px;
+        padding: 40px;
+        text-align: center;
+        position: relative;
+        cursor: pointer;
 
-        .card:hover {
-            transform: translateY(-10px) scale(1.02);
-            background: linear-gradient(135deg, var(--primary-orange), var(--primary-blue));
-        }
+        overflow: hidden;
+        transition: transform 0.4s ease, background-color 0.3s ease;
+      }
 
-        .card h3 {
-            color: var(--primary-orange);
-            margin: 15px 0 10px;
-            transition: color 0.3s ease;
-        }
+      .card:hover {
+        transform: translateY(-10px) scale(1.02);
+        background: linear-gradient(
+          135deg,
+          var(--primary-orange),
+          var(--primary-blue)
+        );
+      }
 
-        .card:hover h3 {
-            color: var(--light-text);
-        }
+      .card h3 {
+        color: var(--primary-orange);
+        margin: 15px 0 10px;
+        transition: color 0.3s ease;
+      }
 
-        .card p {
-            color: #bbb;
-            font-size: 1em;
-            margin: 0 0 15px;
-        }
+      .card:hover h3 {
+        color: var(--light-text);
+      }
 
-        .button {
-            display: inline-block;
-            padding: 10px 20px;
-            font-size: 1em;
-            color: var(--light-text);
-            background-color: var(--primary-orange);
-            border: none;
-            border-radius: 8px;
-            text-decoration: none;
-            cursor: pointer;
-            transition: background-color 0.3s ease, transform 0.2s ease;
-        }
+      .card p {
+        color: #bbb;
+        font-size: 1em;
+        margin: 0 0 15px;
+      }
 
-        .button:hover {
-            background-color: var(--primary-blue);
-            transform: scale(1.1);
-        }
+      .button {
+        display: inline-block;
+        padding: 10px 20px;
+        font-size: 1em;
+        color: var(--light-text);
+        background-color: var(--primary-orange);
+        border: none;
+        border-radius: 8px;
+        text-decoration: none;
+        cursor: pointer;
+        transition: background-color 0.3s ease, transform 0.2s ease;
+      }
 
-        footer {
-            text-align: center;
-            padding: 20px;
-            background-color: #1a1a1a;
-            border-top: 3px solid var(--accent);
-            color: var(--light-text);
-            font-size: 0.9em;
-        }
+      .button:hover {
+        background-color: var(--primary-blue);
+        transform: scale(1.1);
+      }
+
+      footer {
+        text-align: center;
+        padding: 20px;
+        background-color: #1a1a1a;
+        border-top: 3px solid var(--accent);
+        color: var(--light-text);
+        font-size: 0.9em;
+      }
+
+      .abt {
+        gap: 20px;
+        padding: 40px 20px;
+        border-bottom: 3px solid var(--accent);
+      }
+      .abtme {
+        margin-left: 20px;
+      }
     </style>
-</head>
-<body>
+  </head>
+  <body>
     <header>
-        <h1>GameVerse</h1>
-        <p>Your ultimate destination for games, blogs, and fun!</p>
+      <h1>GameVerse</h1>
+      <p>
+        Hi! I'm <i>ParticlePhysicsGithub</i>, and I love making small web games!
+      </p>
     </header>
+    <section class="abt">
+      <div class="abtme">
+        <h3>About Me</h3>
+        <p>
+          I'm just a random person making projects! I make projects in Python,
+          Javascript, CSS, and HTML. The games below are my most recent.
+        </p>
 
+
+      </div>
+    </section>
     <section class="content">
-        <div class="card" onclick="window.location.href='ultimatus.html'">
-            <h3>Ultimatus Clicker</h3>
-            <p>A basic clicker that I made for fun.</p>
-            <button class="button">Play Now</button>
-        </div>
+      <div class="card" onclick="window.location.href='ultimatus.html'">
+        <h3>Ultimatus Clicker</h3>
+        <p>A basic clicker that I made for fun.</p>
+        <button class="button">Play Now</button>
+      </div>
 
-        <div class="card" onclick="window.location.href='mxterminal.html'">
-            <h3>Maximas WebTerminal</h3>
-            <p>Type some stuff in and see what happens! This is a basic terminal system.</p>
-            <button class="button">Play Now</button>
-        </div>
+      <div class="card" onclick="window.location.href='mxterminal.html'">
+        <h3>Maximas WebTerminal</h3>
+        <p>
+          Type some stuff in and see what happens! This is a basic terminal
+          system.
+        </p>
+        <button class="button">Play Now</button>
+      </div>
 
-        <div class="card" onclick="window.location.href='game3.html'">
-            <h3>Game 3</h3>
-            <p>A multiplayer extravaganza with endless replayability.</p>
-            <button class="button">Play Now</button>
-        </div>
+      <div class="card" onclick="window.location.href='game3.html'">
+        <h3>Game 3</h3>
+        <p>A multiplayer extravaganza with endless replayability.</p>
+        <button class="button">Play Now</button>
+      </div>
 
-        <div class="card" onclick="window.location.href='game4.html'">
-            <h3>Game 4</h3>
-            <p>Engage in strategic challenges and rise to the top!</p>
-            <button class="button">Play Now</button>
-        </div>
+      <div class="card" onclick="window.location.href='game4.html'">
+        <h3>Game 4</h3>
+        <p>Engage in strategic challenges and rise to the top!</p>
+        <button class="button">Play Now</button>
+      </div>
 
-        <div class="card" onclick="window.location.href='game5.html'">
-            <h3>Game 5</h3>
-            <p>Join the tournament and showcase your skills to the world.</p>
-            <button class="button">Play Now</button>
-        </div>
+      <div class="card" onclick="window.location.href='game5.html'">
+        <h3>Game 5</h3>
+        <p>Join the tournament and showcase your skills to the world.</p>
+        <button class="button">Play Now</button>
+      </div>
     </section>
 
     <footer>
-        <p>&copy; 2025 GameVerse. All rights reserved.</p>
-        <p>Designed with passion and precision.</p>
+      <p>why did you look here?</p>
+      <p>ParticlePhysicsGithub 2024-2025</p>
     </footer>
-</body>
+  </body>
 </html>
