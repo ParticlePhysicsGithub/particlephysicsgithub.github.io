@@ -49,7 +49,7 @@ nav.wave-top::before {
     height: 40px;
     background: var(--background-color);
     border-radius: 50%;
-    animation: wave 4s infinite linear;
+    
 }
 
 nav .container {
@@ -129,6 +129,7 @@ nav .nav-links a:hover {
 }
 
 .game-card {
+    margin:10px;
     background: var(--background-color);
     padding: 1rem;
     border-radius: 8px;
@@ -138,7 +139,7 @@ nav .nav-links a:hover {
 }
 
 .game-card:hover {
-    transform: scale(1.05);
+    transform: scale(1.2);
     box-shadow: 0 8px 20px var(--card-shadow);
 }
 
