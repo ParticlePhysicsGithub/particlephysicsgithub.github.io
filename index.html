@@ -66,17 +66,40 @@
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
             width: 300px;
             overflow: hidden;
+            position: relative;
+            cursor: pointer;
+            transition: transform 0.3s, background-color 0.3s;
         }
 
-        .card img {
+        .card:hover {
+            transform: translateY(-10px);
+            background-color: var(--primary-blue);
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
             width: 100%;
-            height: 200px;
-            object-fit: cover;
+            height: 100%;
+            background: linear-gradient(135deg, transparent, var(--primary-orange));
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .card:hover::before {
+            opacity: 0.2;
         }
 
         .card h3 {
-            color: var(--primary-blue);
+            color: var(--primary-orange);
             margin: 15px;
+            transition: color 0.3s;
+        }
+
+        .card:hover h3 {
+            color: var(--light-text);
         }
 
         .card p {
@@ -90,6 +113,35 @@
             color: var(--light-text);
             border-top: 2px solid var(--accent);
             margin-top: 20px;
+        }
+
+        .game-panel {
+            background-color: #1e1e1e;
+            padding: 20px;
+            border-radius: 10px;
+            width: calc(100% - 40px);
+            max-width: 600px;
+            text-align: center;
+            transition: background-color 0.3s, transform 0.3s;
+        }
+
+        .game-panel:hover {
+            background-color: var(--primary-orange);
+            transform: scale(1.05);
+        }
+
+        .game-panel h2 {
+            margin: 0 0 10px;
+            color: var(--primary-blue);
+            transition: color 0.3s;
+        }
+
+        .game-panel:hover h2 {
+            color: var(--light-text);
+        }
+
+        .game-panel p {
+            margin: 0;
         }
     </style>
 </head>
@@ -108,21 +160,36 @@
     </nav>
 
     <section class="content">
-        <div class="card">
-            <img src="https://via.placeholder.com/300x200" alt="Game 1">
-            <h3>Featured Game</h3>
-            <p>Experience the thrill of adventure with our top game of the month!</p>
-        </div>
-        <div class="card">
-            <img src="https://via.placeholder.com/300x200" alt="Blog">
-            <h3>Latest Blog Post</h3>
-            <p>Stay updated with the latest trends in gaming and technology.</p>
-        </div>
-        <div class="card">
-            <img src="https://via.placeholder.com/300x200" alt="Community">
-            <h3>Join Our Community</h3>
-            <p>Connect with gamers from around the globe and share your experiences.</p>
-        </div>
+        <a href="game1.html">
+            <div class="card">
+                <h3>Game 1</h3>
+                <p>A fast-paced adventure that will keep you on the edge of your seat.</p>
+            </div>
+        </a>
+        <a href="game2.html">
+            <div class="card">
+                <h3>Game 2</h3>
+                <p>Explore a vast open world and uncover hidden secrets.</p>
+            </div>
+        </a>
+        <a href="game3.html">
+            <div class="card">
+                <h3>Game 3</h3>
+                <p>A multiplayer extravaganza with endless replayability.</p>
+            </div>
+        </a>
+        <a href="game4.html">
+            <div class="game-panel">
+                <h2>Exclusive Game Panel</h2>
+                <p>Dive into an immersive experience like no other.</p>
+            </div>
+        </a>
+        <a href="game5.html">
+            <div class="game-panel">
+                <h2>Featured Tournament</h2>
+                <p>Join now and show your skills to the world!</p>
+            </div>
+        </a>
     </section>
 
     <footer>
@@ -131,4 +198,3 @@
     </footer>
 </body>
 </html>
-
