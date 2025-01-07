@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Interactive Terminal</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      /* Basic Reset */
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Roboto", sans-serif;
+        background-color: #1a1228; /* Deep dark purple background */
+        color: #d9c7e3; /* Soft lavender text */
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        overflow: hidden;
+        margin: 0;
+      }
+
+      .terminal-container {
+        background-color: #2e1e3a; /* Dark purple container background */
+        width: 90%;
+
+        max-width: 2000px;
+        min-width: 400px;
+        max-height: 1500px;
+        min-height: 400px;
+        border-radius: 30px;
+        padding: 20px;
+        box-shadow: 0 0 45px rgba(0, 0, 0, 0.9);
+        font-size: 20px;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+      }
+
+      .output {
+        flex-grow: 1;
+        color: #bca5d7; /* Muted lavender output text */
+        font-family: "Courier New", Courier, monospace;
+        white-space: pre-wrap;
+        word-wrap: break-word;
+        margin-bottom: 40px;
+      }
+
+      .input-line {
+        display: flex;
+        align-items: center;
+        margin-top: 10px;
+      }
+
+      .prompt {
+        margin-right: 10px;
+        color: #aa76c5; /* Vibrant purple prompt color */
+        font-weight: bold;
+      }
+
+      input[type="text"] {
+        background-color: #211533; /* Darker purple input background */
+        color: #d9c7e3; /* Soft lavender input text */
+        border: none;
+        outline: none;
+        font-family: "Courier New", Courier, monospace;
+        width: 100%;
+        padding: 5px;
+        font-size: 18px;
+        border-radius: 50px;
+      }
+
+      input[type="text"]:focus {
+        border: none;
+        box-shadow: 0 0 10px rgb(0, 0, 0); /* Bright purple focus border */
+      }
+
+      /* Responsiveness */
+      @media (max-width: 600px) {
+        .terminal-container {
+          width: 95%;
+        }
+        input[type="text"] {
+          font-size: 16px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="terminal-container">
+      <div class="output" id="output">
+        <p>
+          <span class="prompt"></span> Welcome to the terminal! Type a command
+          below.
+        </p>
+      </div>
+
+      <div class="input-line">
+        <span class="prompt"></span>
+        <input
+          type="text"
+          id="userInput"
+          placeholder="Enter your command..."
+          autofocus
+        />
+      </div>
+    </div>
+
+    <script>
+      const userInput = document.getElementById("userInput");
+      const output = document.getElementById("output");
+
+      let maxHistory = 10; // Maximum number of commands to display
+      const commandHistory = []; // Array to store the last 5 commands and their outputs
+      const colorMap = {
+        "c.red": "#d35b6a", // Soft crimson
+        "c.green": "#7f9772", // Muted forest green
+        "c.yellow": "#e6c76a", // Golden yellow
+        "c.brown": "#a67f6b", // Muted taupe
+        "c.pink": "#d88fb9", // Soft rose pink
+        "c.orange": "#c86a47", // Deep burnt orange
+        "c.purple": "#9c78d1", // Vibrant purple
+      };
+
+      // Function to process commands
+      function processCommand() {
+        const command = userInput.value.trim();
+        if (!command) return;
+
+        const indices = command.split(" ");
+        const action = indices[0];
+        let response = "";
+
+        if (action === "echo") {
+          const text = indices.slice(1).join(" ") || prev;
+
+          response = `🌸 out: ${text}`;
+        } else if (action === "help") {
+          response = `🪙 Available commands:
+                    - echo [text]
+                    - eval [expression]
+                    - help
+                    - quit
+                    - rand [low] [high] [t.type (t.int, t.float)]
+                    - table [index] [values]...
+                    - sys [maxDisplay] [amt]
+                    - clear
+                `;
+        } else if (action === "eval") {
+          try {
+            const expression = indices.slice(1).join(" ");
+            prev = eval(expression);
+            response = `🌸 out: ${prev}`;
+          } catch (error) {
+            response = `<span style="color:#b94d5c">💥 error: invalid expression</span>`;
+          }
+        } else if (action === "sys") {
+          const subCommand = indices[1];
+          const subCommandInput = indices[2];
+          if (subCommand == "maxDisplay") {
+            if (!isNaN(parseInt(subCommandInput))) {
+              // Ensure the input is a valid number
+              maxHistory = parseInt(subCommandInput);
+              response = `❗out: maxHistory set to ${parseInt(
+                subCommandInput
+              )}`;
+            } else {
+              response = `<span style="color:#b94d5c">💥 error: invalid input for sys.maxDisplay</span>`;
+            }
+          } else if (subCommand == "bkgColor") {
+            const hexCodeRegex = /^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/;
+            if (hexCodeRegex.test(subCommandInput)) {
+              document.body.style.backgroundColor = subCommandInput;
+              document.querySelector(
+                "input[type='text']"
+              ).style.backgroundColor = subCommandInput;
+
+              response = `❗out: bkgColor set to ${subCommandInput}`;
+            } else {
+              response = `<span style="color:#b94d5c">💥 error: not a hex code</span>`;
+            }
+          } else if (subCommand == "termiColor") {
+            const hexCodeRegex = /^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/;
+            if (hexCodeRegex.test(subCommandInput)) {
+              document.querySelector(
+                ".terminal-container"
+              ).style.backgroundColor = subCommandInput;
+              response = `❗out: termiColor set to ${subCommandInput}`;
+            } else {
+              response = `<span style="color:#b94d5c">💥 error: not a hex code</span>`;
+            }
+          } else if (subCommand == "textColor") {
+            const hexCodeRegex = /^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/;
+            if (hexCodeRegex.test(subCommandInput)) {
+              document.querySelector(".output").style.color = subCommandInput;
+
+              document.querySelector("input[type='text']").style.color =
+                subCommandInput;
+              response = `❗out: textColor set to ${subCommandInput}`;
+            } else {
+              response = `<span style="color:#b94d5c">💥 error: not a hex code</span>`;
+            }
+          } else {
+            response = `<span style="color:#b94d5c">💥 error: sys command '${subCommand}' not found</span>`;
+          }
+        } else if (action == "rand") {
+          const low = parseInt(indices[1]);
+          const high = parseInt(indices[2]);
+          const type = indices[3];
+          let randNum;
+          if (isNaN(low) || isNaN(high)) {
+            response = `<span style="color:#b94d5c">💥 error: low and high must be valid numbers</span>`;
+          } else {
+            if (type === "t.int") {
+              randNum = Math.floor(Math.random() * (high - low + 1)) + low;
+              response = `🌸 out: ${randNum}`;
+            } else if (type === "t.float") {
+              randNum = Math.random() * (high - low) + low;
+              response = `🌸 out: ${randNum.toFixed(2)}`; // Optional: limiting to 2 decimal points
+            } else {
+              response = `<span style="color:#b94d5c">💥 error: invalid type '${type}'</span>`;
+            }
+          }
+        } else if (action === "table") {
+          const parts = indices.slice(1); // Skip the 'table' command
+          const rows = [];
+          let currentRow = [];
+
+          // Loop through the parts and create rows dynamically
+          parts.forEach((element) => {
+            if (isNaN(element)) {
+              // Start a new row when a non-numeric element is encountered
+              if (currentRow.length > 0) {
+                rows.push(currentRow);
+              }
+              currentRow = [element]; // New row starts with the label
+            } else {
+              currentRow.push(element);
+            }
+          });
+
+          // Push the last row if not empty
+          if (currentRow.length > 0) {
+            rows.push(currentRow);
+          }
+
+          // Find the maximum row length
+          const maxLength = Math.max(...rows.map((row) => row.length));
+
+          // Pad rows with "-" to make all rows equal length
+          const paddedRows = rows.map((row) => {
+            const missingCount = maxLength - row.length;
+            return [...row, ...Array(missingCount).fill("-")];
+          });
+
+          // Format the rows into a string with " | " separators
+          const formattedTable = paddedRows
+            .map((row) => row.join(" | "))
+            .join("\n");
+
+          response = `<pre>${formattedTable}</pre>`;
+        } else if (action === "quit") {
+          response = "Goodbye!";
+          setTimeout(() => window.close(), 2500);
+        } else if (action !== "clear") {
+          response = `<span style="color:#b94d5c">💥 error: command '${action}' not found</span>`;
+        }
+
+        // Store the command and response in the history
+        if (commandHistory.length >= maxHistory) {
+          commandHistory.shift(); // Remove the oldest command if we have reached the history limit
+        }
+        commandHistory.push({ input: command, output: response });
+
+        // Update the output with the last 5 commands and responses
+        output.innerHTML = "";
+        if (action !== "clear") {
+          commandHistory.forEach((item) => {
+            output.innerHTML += `<p><span class="prompt"></span>${item.input}</p>`;
+            output.innerHTML += `<p>${item.output}</p>`;
+          });
+        } else if (action == "clear") {
+          commandHistory.length = 0;
+        }
+        // Clear the input field and focus it for the next command
+        userInput.value = "";
+        userInput.focus();
+      }
+
+      // Key to trigger command processing
+      userInput.addEventListener("keypress", function (event) {
+        if (event.key === "Enter") {
+          processCommand();
+        }
+      });
+    </script>
+  </body>
+</html>
