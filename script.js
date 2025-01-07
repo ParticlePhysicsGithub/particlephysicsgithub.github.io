@@ -1,4 +1,4 @@
-// Smooth Scroll Effect
+// Smooth scrolling
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     anchor.addEventListener('click', function (e) {
         e.preventDefault();
@@ -8,5 +8,5 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     });
 });
 
-// Console Easter Egg
-console.log("Welcome to Particle Physics Games! 🚀");
+// Easter egg in console
+console.log('Welcome to Particle Physics Games! 🎮');
