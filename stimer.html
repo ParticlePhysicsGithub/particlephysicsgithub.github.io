@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Fancy Stopwatch & Timer</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Arial", sans-serif;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        background: linear-gradient(135deg, #1e3c72, #2a5298);
+        color: #fff;
+      }
+
+      .container {
+        text-align: center;
+        padding: 20px;
+        background: rgba(0, 0, 0, 0.7);
+        border-radius: 15px;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
+      }
+
+      .time-display {
+        font-size: 3rem;
+        font-weight: bold;
+        margin-bottom: 20px;
+      }
+
+      .controls {
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+      }
+
+      .controls button {
+        padding: 10px 20px;
+        font-size: 1rem;
+        font-weight: bold;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+
+      .controls button:hover {
+        background: rgba(255, 255, 255, 0.2);
+      }
+
+      .controls button:disabled {
+        cursor: not-allowed;
+        opacity: 0.5;
+      }
+
+      .timer-setter {
+        margin: 15px 0;
+      }
+
+      .timer-setter input {
+        width: 50px;
+        font-size: 1.2rem;
+        text-align: center;
+        margin-right: 10px;
+        border: 2px solid #fff;
+        background: transparent;
+        color: #fff;
+        border-radius: 5px;
+      }
+
+      .timer-setter button {
+        padding: 5px 15px;
+        font-size: 1rem;
+      }
+
+      .mode-toggle {
+        margin-bottom: 20px;
+      }
+
+      .mode-toggle button {
+        padding: 10px 20px;
+        font-size: 1rem;
+        font-weight: bold;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+
+      .mode-toggle button:hover {
+        background: rgba(255, 255, 255, 0.2);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="mode-toggle">
+        <button id="toggle-mode">Switch to Timer Mode</button>
+      </div>
+
+      <div class="time-display" id="display">00:00:00.000</div>
+
+      <div class="controls">
+        <button id="start">Start</button>
+        <button id="pause">Pause</button>
+        <button id="reset">Reset</button>
+      </div>
+
+      <div class="timer-setter" id="timer-settings">
+        <input type="number" id="minutes" placeholder="Min" min="0" />
+        <input type="number" id="seconds" placeholder="Sec" min="0" />
+        <button id="set-timer">Set Timer</button>
+      </div>
+    </div>
+
+    <script>
+      const display = document.getElementById("display");
+      const startBtn = document.getElementById("start");
+      const pauseBtn = document.getElementById("pause");
+      const resetBtn = document.getElementById("reset");
+      const setTimerBtn = document.getElementById("set-timer");
+      const minutesInput = document.getElementById("minutes");
+      const secondsInput = document.getElementById("seconds");
+      const toggleModeBtn = document.getElementById("toggle-mode");
+      const timerSettings = document.getElementById("timer-settings");
+
+      let interval;
+      let time = 0;
+      let isRunning = false;
+      let mode = "stopwatch"; // Modes: 'stopwatch' or 'timer'
+
+      function formatTime(t) {
+        const milliseconds = t % 1000;
+        const totalSeconds = Math.floor(t / 1000);
+        const hours = Math.floor(totalSeconds / 3600);
+        const minutes = Math.floor((totalSeconds % 3600) / 60);
+        const seconds = totalSeconds % 60;
+        return (
+          [hours, minutes, seconds]
+            .map((num) => String(num).padStart(2, "0"))
+            .join(":") +
+          "." +
+          String(milliseconds).padStart(3, "0")
+        );
+      }
+
+      function updateDisplay() {
+        display.textContent = formatTime(time);
+      }
+
+      function startTimer() {
+        if (isRunning) return;
+        isRunning = true;
+        interval = setInterval(() => {
+          if (mode === "stopwatch") {
+            time += 10;
+          } else if (mode === "timer") {
+            if (time > 0) {
+              time -= 10;
+            } else {
+              pauseTimer();
+              alert("Time is up!");
+            }
+          }
+          updateDisplay();
+        }, 10);
+      }
+
+      function pauseTimer() {
+        isRunning = false;
+        clearInterval(interval);
+      }
+
+      function resetTimer() {
+        pauseTimer();
+        time = mode === "stopwatch" ? 0 : time;
+        updateDisplay();
+      }
+
+      function setTimer() {
+        const minutes = parseInt(minutesInput.value) || 0;
+        const seconds = parseInt(secondsInput.value) || 0;
+        time = (minutes * 60 + seconds) * 1000;
+        updateDisplay();
+      }
+
+      function toggleMode() {
+        mode = mode === "stopwatch" ? "timer" : "stopwatch";
+        toggleModeBtn.textContent =
+          mode === "stopwatch"
+            ? "Switch to Timer Mode"
+            : "Switch to Stopwatch Mode";
+        timerSettings.style.display = mode === "stopwatch" ? "none" : "block";
+        resetTimer();
+      }
+
+      startBtn.addEventListener("click", startTimer);
+      pauseBtn.addEventListener("click", pauseTimer);
+      resetBtn.addEventListener("click", resetTimer);
+      setTimerBtn.addEventListener("click", setTimer);
+      toggleModeBtn.addEventListener("click", toggleMode);
+
+      updateDisplay();
+      timerSettings.style.display = "none";
+    </script>
+  </body>
+</html>
