@@ -1,1 +1,72 @@
+/* General Styles */
+body {
+    background-color: #86cecb;
+    font-family: "Roboto", sans-serif;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+/* Header */
+header {
+    background-color: #e12885;
+    padding: 20px;
+    
+    text-align: center;
+    color: white;
+}
+
+/* Main Content */
+.content {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+    padding: 20px;
+}
+
+/* Card Style */
+.card {
+    background: white;
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    width: 250px;
+    text-align: center;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+    
+}
+
+.card:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+}
+
+/* Button Styles */
+.button {
+    background-color: #e12885;
+    color: white;
+    padding: 10px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.button:hover {
+    background-color: #c11a70;
+}
+
+/* Footer */
+footer {
+    background-color: #e12885;
+    padding: 20px;
+    text-align: center;
+    
+    color: white;
+    margin-top: auto;
+}
 
