@@ -308,8 +308,8 @@
       document.getElementById('clicks').innerText = clicks.toFixed(2);
       document.getElementById('cpc').innerText = cpc;
       document.getElementById('cps').innerText = cps;
-      document.getElementById('cpc-cost').innerText = cpcCost;
-      document.getElementById('cps-cost').innerText = cpsCost;
+      document.getElementById('cpc-cost').innerText = cpcCost * computeQuantity(cpcCost);;
+      document.getElementById('cps-cost').innerText = cpsCost * computeQuantity(cpsCost);;
       
       // Update upgrade button colors based on affordability
       document.getElementById('cpc-upgrade').className = (clicks >= cpcCost) ? 'green' : 'red';
