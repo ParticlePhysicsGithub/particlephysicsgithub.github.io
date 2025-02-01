@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Miku Clicker</title>
+  <style>
+    /* Base styles for a modern, clean look */
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #f0f0f0;
+      color: #333;
+      margin: 0;
+      padding: 20px;
+      display: flex;
+      justify-content: center;
+    }
+    /* Container for the game */
+    .container {
+      background: #fff;
+      border-radius: 15px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      padding: 30px;
+      max-width: 500px;
+      width: 100%;
+      text-align: center;
+    }
+    h1 {
+      font-size: 2.5rem;
+      color: #1e90ff;
+      margin-bottom: 20px;
+    }
+    /* Clickable area styling */
+    .click-area {
+      margin: 20px auto;
+      cursor: pointer;
+      width: 150px;
+      height: 150px;
+      background: url('https://upload.wikimedia.org/wikipedia/commons/e/ec/Hatsune_Miku_Logo.svg') no-repeat center;
+      background-size: 80%;
+      border: 2px solid #1e90ff;
+      border-radius: 50%;
+      transition: transform 0.1s, box-shadow 0.1s;
+    }
+    .click-area:hover {
+      box-shadow: 0 0 15px rgba(30, 144, 255, 0.5);
+    }
+    .click-area:active {
+      transform: scale(0.95);
+    }
+    /* Button styling */
+    button {
+      margin: 10px 5px;
+      padding: 10px 20px;
+      font-size: 1.1rem;
+      font-weight: 600;
+      border: none;
+      border-radius: 8px;
+      transition: background 0.3s, transform 0.1s;
+      cursor: pointer;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+    button:active {
+      transform: scale(0.98);
+    }
+    /* Primary blue button */
+    .primary {
+      background: #1e90ff;
+      color: #fff;
+    }
+    .primary:hover {
+      background: #187bcd;
+    }
+    /* Secondary grey button */
+    .secondary {
+      background: #e0e0e0;
+      color: #333;
+    }
+    .secondary:hover {
+      background: #d0d0d0;
+    }
+    /* Reset button specific style */
+    #reset-btn {
+      background: #ff4d4d;
+      color: #fff;
+    }
+    #reset-btn:hover {
+      background: #e04444;
+    }
+    /* Upgrade buttons: color change based on affordability */
+    .green {
+      background: #1e90ff !important;
+      color: #fff !important;
+    }
+    .red {
+      background: #ccc !important;
+      color: #333 !important;
+    }
+    /* Stats text */
+    .stats {
+      font-size: 1.3rem;
+      margin: 10px 0;
+    }
+    /* Buy quantity buttons */
+    .buy-quantity button {
+      padding: 5px 15px;
+      font-size: 1rem;
+    }
+    .buy-quantity .selected {
+      border: 2px solid #1e90ff;
+      box-shadow: 0 0 8px rgba(30, 144, 255, 0.5);
+    }
+    /* Achievements section */
+    .achievements {
+      margin: 20px auto;
+      max-width: 400px;
+      background: #fafafa;
+      padding: 15px;
+      border-radius: 10px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+      text-align: left;
+    }
+    .achievements h2 {
+      color: #1e90ff;
+      font-size: 1.3rem;
+      margin-bottom: 10px;
+    }
+    .achievement {
+      margin: 5px 0;
+      padding: 5px;
+      border-bottom: 1px solid #ddd;
+    }
+
+    .achievement-popup {
+        position: fixed;
+        bottom: -100px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: #1e90ff;
+        color: white;
+        padding: 15px 30px;
+        border-radius: 10px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        transition: bottom 0.5s ease-in-out;
+        opacity: 1;
+    }
+
+
+  </style>
+</head>
+<body>
+  <div id="achievement-popup" class="achievement-popup" style="display: none;"></div>
+
+  <div class="container">
+    <h1>Miku Clicker</h1>
+    <div class="click-area" onclick="clickMiku()"></div>
+    <br>
+    
+    <p class="stats">Clicks: <span id="clicks">0</span></p>
+    <p class="stats">CPC: <span id="cpc">1</span> | CPS: <span id="cps">0</span></p>
+    
+    <div class="buy-quantity">
+      <button id="qty-1" class="secondary" onclick="setBuyQuantity('1')">x1</button>
+      <button id="qty-10" class="secondary" onclick="setBuyQuantity('10')">x10</button>
+      <button id="qty-100" class="secondary" onclick="setBuyQuantity('100')">x100</button>
+      <button id="qty-10p" class="secondary" onclick="setBuyQuantity('10%')">10%</button>
+      <button id="qty-50p" class="secondary" onclick="setBuyQuantity('50%')">50%</button>
+      <button id="qty-max" class="secondary" onclick="setBuyQuantity('MAX')">MAX</button>
+    </div>
+    
+    <div class="upgrades">
+      <button id="cpc-upgrade" class="secondary" onclick="buyUpgrade('cpc')">
+        Upgrade CPC (+1) - Cost: <span id="cpc-cost">10</span>
+      </button>
+      <button id="cps-upgrade" class="secondary" onclick="buyUpgrade('cps')">
+        Upgrade CPS (+1) - Cost: <span id="cps-cost">50</span>
+      </button>
+    </div>
+    
+    <div class="extra-actions">
+      <button id="reset-btn" onclick="resetGameButton()">Reset Game</button>
+      <button class="bk-button" type="button" onclick="window.location.href = 'index.html';">Back</button>
+
+    </div>
+    
+    <div class="achievements">
+      <h2>Achievements</h2>
+      <div id="achievement-list">
+        <!-- Achievements will appear here -->
+      </div>
+    </div>
+  </div>
+  
+  <script>
+    let clicks = 0;
+    let cpc = 1;
+    let cps = 0;
+    let cpcCost = 10;
+    let cpsCost = 50;
+    // buyQuantity can be a number as a string or one of the strings: "10%", "50%", "MAX"
+    let buyQuantity = '1';
+    let resetTimeout;
+    
+    // Easily modifiable achievements list in the format: ["name", "resource", amt]
+    // Resource can be "clicks", "cpc", or "cps".
+    const achievements = [
+      ["Getting Started", "clicks", 100],
+      ["Keep Going", "clicks", 1000],
+      ["Master", "clicks", 10000],
+      ["Legendary Clicker", "clicks", 100000],
+      ["Lifelong Clicker", "clicks", 1000000],
+      ["Worth More", "cpc", 2],
+      ["Probably Fraud", "cpc", 25],
+      ["Trees Of Money", "cpc", 100],
+      ["That's Definitely Fraud", "cpc", 1000],
+      ["I'll Do It For You", "cps", 1],
+      ["A Small Crew", "cps", 100],
+      ["A Whole Factory", "cps", 1000]
+    ];
+
+
+    // Update the quantity selection for buttons
+    
+
+    
+    
+
+    // Compute the quantity to buy based on the selected option and the cost
+    function updateQuantitySelection() {
+    const options = ['1', '10', '100', '10%', '50%', 'MAX'];
+    options.forEach(opt => {
+        const btn = document.getElementById('qty-' + (opt === 'MAX' ? 'MAX' : opt.replace('%', 'p')));
+        if (btn) {
+        if (opt === buyQuantity) {
+            btn.classList.add('selected');
+        } else {
+            btn.classList.remove('selected');
+        }
+        }
+    });
+    }
+
+    
+    function setBuyQuantity(qty) {
+      buyQuantity = qty;
+      updateQuantitySelection();
+    }
+    
+    // Compute the quantity to buy based on the selected option and the cost.
+    function computeQuantity(cost) {
+      const r = 1.2; // cost multiplier
+      if (buyQuantity === '10%') {
+        const target = 0.1 * clicks;
+        const n = Math.floor(Math.log(1 + target * (r - 1) / cost) / Math.log(r));
+        return n > 0 ? n : 0;
+      } else if (buyQuantity === '50%') {
+        const target = 0.5 * clicks;
+        const n = Math.floor(Math.log(1 + target * (r - 1) / cost) / Math.log(r));
+        return n > 0 ? n : 0;
+      } else if (buyQuantity === 'MAX') {
+        const n = Math.floor(Math.log(1 + clicks * (r - 1) / cost) / Math.log(r));
+        return n > 0 ? n : 0;
+      } else {
+        return parseInt(buyQuantity);
+      }
+    }
+    
+    function clickMiku() {
+      clicks += cpc;
+      updateUI();
+    }
+    
+    function buyUpgrade(type) {
+      let cost = type === 'cpc' ? cpcCost : cpsCost;
+      let quantity = computeQuantity(cost);
+      if (quantity <= 0) return; // Nothing to buy
+      
+      const r = 1.2;
+      // Calculate total cost using the geometric series sum formula:
+      // totalCost = cost * (r^n - 1) / (r - 1)
+      let totalCost = cost * (Math.pow(r, quantity) - 1) / (r - 1);
+      if (clicks >= totalCost) {
+        clicks -= totalCost;
+        if (type === 'cpc') {
+          cpc += quantity;
+          cpcCost = Math.ceil(cpcCost * Math.pow(r, quantity));
+        } else {
+          cps += quantity;
+          cpsCost = Math.ceil(cpsCost * Math.pow(r, quantity));
+        }
+        updateUI();
+      }
+    }
+
+    function showAchievementPopup(text) {
+        const popup = document.getElementById("achievement-popup");
+        popup.innerText = text;
+        popup.style.display = "block";
+        popup.style.bottom = "20px";
+        setTimeout(() => { 
+            popup.style.bottom = "-100px"; 
+            setTimeout(() => popup.style.display = "none", 500); 
+        }, 2000);
+        }
+
+    
+    function updateUI() {
+      document.getElementById('clicks').innerText = clicks.toFixed(2);
+      document.getElementById('cpc').innerText = cpc;
+      document.getElementById('cps').innerText = cps;
+      document.getElementById('cpc-cost').innerText = cpcCost;
+      document.getElementById('cps-cost').innerText = cpsCost;
+      
+      // Update upgrade button colors based on affordability
+      document.getElementById('cpc-upgrade').className = (clicks >= cpcCost) ? 'green' : 'red';
+      document.getElementById('cps-upgrade').className = (clicks >= cpsCost) ? 'green' : 'red';
+      
+      checkAchievements();
+    }
+    
+    // Check achievements based on resource thresholds
+    let unlockedAchievements = new Set(); // Track unlocked achievements
+
+    function checkAchievements() {
+        let list = document.getElementById('achievement-list');
+        if (!list) {
+            console.error("Element with ID 'achievement-list' not found.");
+            return;
+        }
+
+        
+
+         // Refresh achievement list
+
+        achievements.forEach(ach => {
+            const [name, resource, amt] = ach;
+            let current = resource === "clicks" ? clicks : (resource === "cpc" ? cpc : cps);
+
+            
+
+            if (current >= amt && !unlockedAchievements.has(name)) {
+                console.log(`Unlocking: ${name}`);
+
+                unlockedAchievements.add(name); // Mark as unlocked
+                showAchievementPopup(`${name} Unlocked!`);
+
+                let div = document.createElement('div');
+                div.className = 'achievement';
+                div.innerText = `${name} (${amt} ${resource})`;
+                list.appendChild(div);
+            }
+        });
+        
+    }
+
+
+
+    
+    // Reset game with a double-click mechanism (button text changes to "Sure?")
+    function resetGameButton() {
+      const resetBtn = document.getElementById("reset-btn");
+      if (resetBtn.innerText !== "Sure?") {
+        resetBtn.innerText = "Sure?";
+        resetTimeout = setTimeout(() => {
+          resetBtn.innerText = "Reset Game";
+        }, 5000);
+      } else {
+        clearTimeout(resetTimeout);
+        clicks = 0;
+        cpc = 1;
+        cps = 0;
+        cpcCost = 10;
+        cpsCost = 50;
+        buyQuantity = '1';
+        updateQuantitySelection();
+        updateUI();
+        resetBtn.innerText = "Reset Game";
+      }
+    }
+    
+    // Auto click per second
+    setInterval(() => {
+      clicks += cps / 100;
+      updateUI();
+    }, 10);
+    
+    // Initialize quantity selection on load
+    updateQuantitySelection();
+  </script>
+</body>
+</html>
