@@ -1,9 +1,11 @@
-/* Place your JavaScript in this file */
-document.addEventListener("DOMContentLoaded", function () {
-    document.querySelectorAll(".card").forEach(card => {
-        card.addEventListener("click", function () {
-            window.location.href = this.dataset.url;
+document.addEventListener("DOMContentLoaded", function() {
+    const cards = document.querySelectorAll('.card');
+    
+    cards.forEach(card => {
+        const button = card.querySelector('.button');
+        button.addEventListener('click', function() {
+            const url = card.getAttribute('data-url');
+            window.location.href = url; // Redirect to the game URL
         });
     });
 });
-
