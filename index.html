@@ -1,81 +1,344 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="A collection of interactive games and utilities.">
-    <title>The Megaproject</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Portfolio</title>
+  <style>
+    /* Color Palette */
+    :root {
+      --primary: #4c5760;
+      --secondary: #708086;
+      --tertiary: #93a8ac;
+      --quaternary: #b5bbaf;
+      --fifth: #d7ceb2;
+      --sixth: #c29680;
+      --seventh: #b87a67;
+      --eighth: #ad5d4e;
+      --ninth: #66635b;
+      --tenth: #4b4944;
+    }
 
-    <!-- Load external CSS styles -->
-    <link rel="stylesheet" href="styles.css">
+    /* General Styles */
+    body {
+      font-family: 'Roboto', sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: var(--tertiary);
+      color: var(--fifth);
+      scroll-behavior: smooth;
+    }
 
-    <!-- Google Fonts for better typography -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    * {
+      box-sizing: border-box;
+    }
+
+    /* Navbar */
+    nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 10%;
+      background-color: var(--primary);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      transition: background-color 0.3s ease;
+    }
+    nav:hover {
+      background-color: var(--secondary);
+    }
+    nav a {
+      color: var(--fifth);
+      text-decoration: none;
+      font-size: 18px;
+      font-weight: 600;
+      padding: 10px;
+      transition: color 0.3s ease;
+    }
+    nav a:hover {
+      color: var(--sixth);
+    }
+
+    /* Hero Section */
+    .hero {
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: linear-gradient(to right, var(--primary), var(--secondary));
+      color: white;
+      text-align: center;
+    }
+    .hero h1 {
+      font-size: 3.5rem;
+      margin-bottom: 10px;
+      text-transform: uppercase;
+      letter-spacing: 5px;
+    }
+    .hero p {
+      font-size: 1.5rem;
+      margin-bottom: 30px;
+    }
+    .hero a {
+      padding: 10px 30px;
+      background-color: var(--seventh);
+      color: white;
+      text-decoration: none;
+      border-radius: 30px;
+      font-size: 1.2rem;
+      transition: background-color 0.3s ease;
+    }
+    .hero a:hover {
+      background-color: var(--sixth);
+    }
+
+    /* Sections */
+    section {
+      padding: 80px 10%;
+      text-align: center;
+      transition: opacity 0.5s ease;
+      min-height: 100vh; /* Each section takes up one screen height */
+    }
+    section:nth-of-type(even) {
+      background-color: var(--fifth);
+    }
+    section:nth-of-type(odd) {
+      background-color: var(--quaternary);
+    }
+
+    h2 {
+      font-size: 2.5rem;
+      margin-bottom: 20px;
+      text-transform: uppercase;
+      color: var(--primary);
+    }
+
+    p {
+      font-size: 1.2rem;
+      line-height: 1.6;
+      color: var(--fifth);
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    .p2 {
+      font-size: 1.2rem;
+      line-height: 1.6;
+      color: var(--ninth);
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .skills {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 20px;
+      margin-top: 30px;
+    }
+    .skill {
+      background-color: var(--secondary);
+      color: var(--fifth);
+      padding: 20px;
+      width: 200px;
+      border-radius: 10px;
+      text-align: center;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .skill:hover {
+      transform: translateY(-10px);
+      box-shadow: 0px 10px 15px rgba(0, 0, 0, 0.2);
+    }
+    .skillnt {
+      background-color: var(--tenth);
+      color: var(--fifth);
+      padding: 20px;
+      width: 200px;
+      border-radius: 10px;
+      text-align: center;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .skillnt:hover {
+      transform: translateY(-10px);
+      box-shadow: 0px 10px 15px rgba(0, 0, 0, 0.2);
+    }
+    .skillish {
+      background-color: var(--eighth);
+      color: var(--fifth);
+      padding: 20px;
+      width: 200px;
+      border-radius: 10px;
+      text-align: center;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .skillish:hover {
+      transform: translateY(-10px);
+      box-shadow: 0px 10px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    /* Project Panels */
+    .project-panel {
+      display: flex;
+      justify-content: center;
+      flex-direction: column;
+      align-items: center;
+      background-color: var(--sixth);
+      color: var(--fifth);
+      border-radius: 10px;
+      padding: 40px;
+      margin: 20px 0;
+      transition: transform 0.3s ease;
+      position: relative;
+      width: 100%;
+      max-width: 500px;
+      margin: 30px auto;
+    }
+    .project-panel:hover {
+      transform: scale(1.05);
+      box-shadow: 0px 10px 15px rgba(0, 0, 0, 0.2);
+    }
+    .project-panel h3 {
+      font-size: 1.8rem;
+      margin-bottom: 20px;
+    }
+    .project-panel p {
+      font-size: 1.1rem;
+      margin-bottom: 30px;
+    }
+    .project-panel .play-button {
+      background-color: var(--seventh);
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      font-size: 1.2rem;
+      border-radius: 30px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+    .project-panel .play-button:hover {
+      background-color: var(--sixth);
+    }
+
+    /* Footer */
+    footer {
+      background-color: var(--primary);
+      padding: 30px;
+      text-align: center;
+      color: var(--fifth);
+      position: fixed;
+      bottom: 0;
+      width: 100%; /* Ensures the footer spans across the full width */
+    }
+
+    footer a {
+      color: var(--sixth);
+      text-decoration: none;
+    }
+
+    .color-box {
+      width: 30px;
+      height: 30px;
+      display: inline-block;
+      margin-right: 10px;
+      margin-top: 10px;
+      border-radius: 10px;
+    }
+
+
+
+    /* Media Queries */
+    @media (max-width: 768px) {
+      .hero h1 {
+        font-size: 2.5rem;
+      }
+      nav {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      .skills {
+        flex-direction: column;
+      }
+    }
+    
+  </style>
 </head>
 <body>
+  
+  <!-- Navbar -->
+  <nav>
+    <div><a href="#about">About</a></div>
+    <div><a href="#skills">Skills</a></div>
+    <div><a href="#projects">Projects</a></div>
+    <div><a href="#contact">Contact</a></div>
+  </nav>
 
-    <header>
-        <h1><strong>THE MEGAPROJECT</strong></h1>
-    </header>
+  <!-- Hero Section -->
+  <div class="hero">
+    <div>
+      <h1>ParticlePhysicsGithub</h1>
+      <p>Explore my work and discover my passion for building amazing things.</p>
+      <a href="#projects">See My Work</a>
+    </div>
+  </div>
 
-    <main>
-        <section class="content">
-            <div class="card" data-url="game1.html">
-                <h3>The Clicker</h3>
-                <p>A clicker game.</p>
-                <button class="button">Play Now</button>
-            </div>
+  <!-- About Section -->
+  <section id="about">
+    <h2>About Me</h2>
+    <p class="p2">I'm a developer with a passion for creating interactive web applications. My expertise spans across various technologies, and I'm constantly learning new things to improve my craft.</p>
+  </section>
 
-            <div class="card" data-url="game2.html">
-                <h3>Game 2</h3>
-                <p>-</p>
-                <button class="button">Play Now</button>
-            </div>
+  <!-- Skills Section -->
+  <section id="skills">
+    <h2>Skills</h2>
+    <p class="p2">Here are a few skills I've acquired throughout my journey:</p>
+    <div class="skills">
+      <div class="skillish">CSS</div>
+      <div class="skillish">JavaScript</div>
+      <div class="skillnt">React</div>
+      <div class="skillnt">Node.js</div>
+      <div class="skill">Python</div>
+      <div class="skillnt">Git</div>
+      <div class="skill">HTML</div>
+      <div class="skill">Scratch3</div>
+      <div class="skillnt">Lua</div>
+      <div class="skillnt">Rust</div>
+      <div class="skillnt">Go</div>
+      <div class="skillnt">C</div>
+      <div class="skillnt">C++</div>
+      <div class="skillnt">Java</div>
+      <div class="skillish">C#</div>
+      <div class="skillnt">Swift</div>
+    </div>
+    <p class="p2"><span class="color-box" style="background-color: var(--tenth);"></span> Not Learned</p>
+    <p class="p2"><span class="color-box" style="background-color: var(--eighth);"></span> Learning</p>
+    <p class="p2"><span class="color-box" style="background-color: var(--secondary);"></span> Learned</p>
+  </section>
 
-            <div class="card" data-url="game3.html">
-                <h3>Game 3</h3>
-                <p>-</p>
-                <button class="button">Play Now</button>
-            </div>
+  <!-- Projects Section -->
+  <section id="projects">
+    <h2>Projects</h2>
+    <p class="p2">Below are some of the projects I've worked on:</p>
+    
+    <!-- Project Panels -->
+    <div class="project-panel">
+      <h3>A Clicker</h3>
+      <p>...just a clicker.</p>
+      <button class="play-button" onclick="window.location.href='game1.html'">Play</button>
+    </div>
 
-            <div class="card" data-url="game4.html">
-                <h3>Game 4</h3>
-                <p>-</p>
-                <button class="button">Play Now</button>
-            </div>
+  </section>
 
-            <div class="card" data-url="game5.html">
-                <h3>Game 5</h3>
-                <p>-</p>
-                <button class="button">Play Now</button>
-            </div>
-            <div class="card" data-url="game6.html">
-                <h3>Game 6</h3>
-                <p>-</p>
-                <button class="button">Play Now</button>
-            </div>
+  <!-- Contact Section -->
+  <section id="contact">
+    <h2>Contact</h2>
+    <p class="p2">If you'd like to work together or just chat, feel free to reach out!</p>
+    <p><a href="mailto:particlephysicsiguess@gmail.com">Email Me</a></p>
+  </section>
 
-            <div class="card" data-url="game7.html">
-                <h3>Game 7</h3>
-                <p>-</p>
-                <button class="button">Play Now</button>
-            </div>
-
-            <div class="card" data-url="game8.html">
-                <h3>Game 8</h3>
-                <p>-</p>
-                <button class="button">Play Now</button>
-            </div>
-        </section>
-    </main>
-
-    <footer>
-        <p>The MegaProject by Austin | 2025</p>
-    </footer>
-
-    <!-- Load external JavaScript -->
-    <script src="scripts.js"></script>
+  <!-- Footer -->
+  <footer>
+    <p>&copy; 2025 My Portfolio | <a href="mailto:particlephysicsiguess@gmail.com">Email Me</a></p>
+  </footer>
 
 </body>
 </html>
