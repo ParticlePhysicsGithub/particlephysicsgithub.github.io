@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clicker Game</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Thin&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Roboto Thin', sans-serif;
+            background: linear-gradient(135deg, #ff7e5f, #feb47b);
+            text-align: center;
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            color: #fff;
+            overflow: hidden;
+            position: relative;
+        }
+        h1 {
+            font-size: 100px;
+            
+            font-weight: 100;
+            
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.1s ease-in-out;
+            user-select: none; /* Added to make the text unselectable */
+        }
+        h2 {
+            font-size: 28px;
+            margin-bottom: 20px;
+            font-weight: 100;
+            
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.1s ease-in-out;
+            user-select: none; /* Added to make the text unselectable */
+        }
+
+        .icons-container {
+            position: absolute;
+            bottom: 50px;
+            display: flex;
+            justify-content: center;
+            gap: 50px;
+        }
+
+        .camera {
+            display: flex;
+            justify-content: center;
+            background-color: #0A0A0A;
+            position: absolute;
+            top: 5px;
+            padding: 20px;
+            border-radius: 20px;
+            width: 100px;
+        }
+        .icon-btn {
+            background-color: rgba(0, 0, 0, 0.5);
+            padding: 20px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.1s;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 20px;
+            margin-left: 20px;
+            margin-right: 20px;
+        }
+        .icon-btn:hover {
+            background-color: rgba(0, 0, 0, 0.7);
+            transform: scale(1.1);
+        }
+        .icon-btn:active {
+            transform: scale(0.9);
+        }
+        .icon-btn svg {
+            width: 50px;
+            height: 50px;
+        }
+        .icon-text {
+            margin-top: 10px;
+            font-size: 20px;
+        }
+        .settings-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        .settings-btn:hover {
+            background: rgba(0, 0, 0, 0.7);
+        }
+        .settings-btn svg {
+            width: 30px;
+            height: 30px;
+            fill: white;
+        }
+        .settings-menu {
+            position: absolute;
+            top: 80px;
+            right: -200px;
+            background: rgba(0, 0, 0, 0.8);
+            padding: 15px;
+            border-radius: 10px;
+            width: 180px;
+            transition: right 0.3s ease-in-out;
+        }
+        .settings-menu.active {
+            right: 20px;
+        }
+        .reset-btn {
+            background: #ff4d4d;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background 0.3s, transform 0.1s;
+            margin-top: 10px;
+        }
+        .reset-btn:hover {
+            background: #ff1a1a;
+            transform: scale(1.05);
+        }
+        .reset-btn:active {
+            transform: scale(0.95);
+        }
+    </style>
+</head>
+<body onclick="increaseScore()">
+    <div class="camera"></div>
+    <h1 id="score">0</h1>
+    <h2 id="cpccps">1 Click Multi | 0 Score Generation</h2>
+    
+    <div class="settings-btn" onclick="toggleSettings(event)">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path d="M3 6h18M3 12h18M3 18h18" stroke="white" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+    </div>
+    
+    <div class="settings-menu" id="settings-menu">
+        <p>Settings</p>
+        <button class="reset-btn" onclick="resetGame(event)">Reset Game</button>
+    </div>
+    
+    <div class="icons-container">
+        <div class="icon-btn" onclick="buyUpgrade(event)">
+            <svg width="50" height="50" viewBox="0 0 24 24" fill="white" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 2L5 9h4v10h6V9h4l-7-7z"/>
+            </svg>
+            <div class="icon-text" id="upgrade-price">Upgrade: 50</div>
+        </div>
+
+        <div class="icon-btn" onclick="buyCPSUpgrade(event)">
+            <svg width="50" height="50" viewBox="0 0 24 24" fill="white" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="12" cy="12" r="10" stroke="white" stroke-width="2" fill="none"/>
+                <path d="M8 12l4-4 4 4m-4-4v8" stroke="white" stroke-width="2" fill="none"/>
+            </svg>
+            <div class="icon-text" id="cps-upgrade-price">CPS Upgrade: 100</div>
+        </div>
+    </div>
+
+    <script>
+        let score = 0;
+        let upgradeCost = 50;
+        let prestigeCost = 500;
+        let CPC = 1;  // Clicks per click
+        let CPS = 0;  // Clicks per second
+        let cpsUpgradeCost = 100; // Initial CPS upgrade cost
+
+        // Increase score per click
+        function increaseScore() {
+            score += CPC;
+            document.getElementById("score").textContent = score;
+            document.getElementById("score").style.transform = "scale(1.1)";
+            setTimeout(() => document.getElementById("score").style.transform = "scale(1)", 100);
+        }
+
+        // Buy upgrade to increase CPC
+        function buyUpgrade(event) {
+            if (score >= upgradeCost) {
+                score -= upgradeCost;
+                upgradeCost = Math.floor(upgradeCost * 1.5);
+                CPC += 1;
+                updateDisplay();
+            }
+            event.stopPropagation();
+        }
+
+        // Buy upgrade to increase CPS
+        function buyCPSUpgrade(event) {
+            if (score >= cpsUpgradeCost) {
+                score -= cpsUpgradeCost;
+                cpsUpgradeCost = Math.floor(cpsUpgradeCost * 1.5);
+                CPS += 1;
+                updateDisplay();
+            }
+            event.stopPropagation();
+        }
+
+        // Prestige feature to reset score and increase prestige cost
+        function prestige(event) {
+            if (score >= prestigeCost) {
+                score = 0;
+                upgradeCost = 50;
+                prestigeCost = Math.floor(prestigeCost * 1.75);
+                updateDisplay();
+            }
+            event.stopPropagation();
+        }
+
+        // Toggle settings menu
+        function toggleSettings(event) {
+            let menu = document.getElementById("settings-menu");
+            menu.classList.toggle("active");
+            event.stopPropagation();
+        }
+
+        // Reset the game
+        function resetGame(event) {
+            score = 0;
+            upgradeCost = 50;
+            prestigeCost = 500;
+            updateDisplay();
+            event.stopPropagation();
+        }
+
+        // Update the display after upgrades or actions
+        function updateDisplay() {
+            document.getElementById("score").textContent = score;
+            document.getElementById("upgrade-price").textContent = `Click Multiplier Upgrade: ${upgradeCost}`;
+            document.getElementById("cps-upgrade-price").textContent = `Score Generation Upgrade: ${cpsUpgradeCost}`;
+            document.getElementById("cpccps").textContent = `${CPC} Click Multi | ${CPS} Score Generation`;
+        }
+
+        // Function to increase score based on CPS
+        setInterval(function() {
+            score += CPS;
+            updateDisplay();
+        }, 1000); // Increase score every second based on CPS
+    </script>
+</body>
+</html>
