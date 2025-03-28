@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Voting Game</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .vote-animation {
+            animation: voteAnim 0.5s ease-in-out;
+        }
+        @keyframes voteAnim {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+    </style>
+</head>
+<body class="bg-gray-900 text-white flex justify-center items-center min-h-screen">
+    <div class="flex gap-6">
+        <div class="w-96 p-6 bg-gray-800 rounded-xl shadow-lg">
+            <h1 class="text-2xl font-bold text-center mb-4">Simulated Election</h1>
+            <div id="candidates"></div>
+        </div>
+        
+        <div class="w-80 p-6 bg-gray-700 rounded-xl shadow-lg">
+            <h2 class="text-xl font-bold text-center mb-4">Election Controls</h2>
+            <div class="mb-4">
+                <label for="population" class="block text-sm font-medium">Select Population</label>
+                <select id="population" class="w-full p-2 bg-gray-600 rounded">
+                    <option value="331000000">United States (331M)</option>
+                    <option value="125000000">Japan (125M)</option>
+                    <option value="274806">Russia (274K)</option>
+                    <option value="83000000">Germany (83M)</option>
+                    <option value="1400000000">China (1.4B)</option>
+                    <option value="1390000000">India (1.39B)</option>
+                    <option value="67000000">France (67M)</option>
+                    <option value="60000000">Italy (60M)</option>
+                    <option value="38000000">Canada (38M)</option>
+                </select>
+            </div>
+            <div class="text-center">
+                <p class="text-lg">Total Votes: <span id="totalVotes">0</span></p>
+                <p class="text-lg">Voting Time Left: <span id="timeLeft">0d 0h 0m 0s</span></p>
+                <button id="simulate" class="mt-4 bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">Simulate Election</button>
+                <button id="reset" class="mt-4 bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">Reset Election</button>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        function getRandomName() {
+            const firstNames = ["Alice", "Bob", "Charlie", "Dana", "Eve", "Frank", "Grace", "Henry", "Isla", "Jack"];
+            const lastNames = ["Johnson", "Smith", "Brown", "Davis", "Wilson", "Martinez", "Anderson", "Taylor", "Harris", "Clark"];
+            return firstNames[Math.floor(Math.random() * firstNames.length)] + " " + lastNames[Math.floor(Math.random() * lastNames.length)];
+        }
+
+        function getRandomParty() {
+            const parties = ["Blue Party", "Red Party", "Green Party", "Liberty Party", "Progressive Party"];
+            return parties[Math.floor(Math.random() * parties.length)];
+        }
+
+        function getRandomStat() {
+            return Math.floor(Math.random() * 101);
+        }
+
+        let candidates = [];
+        let totalVotes = 0;
+        let timeLeft = 86400;
+        let interval;
+
+        function formatTime(seconds) {
+            let days = Math.floor(seconds / 86400);
+            seconds %= 86400;
+            let hours = Math.floor(seconds / 3600);
+            seconds %= 3600;
+            let minutes = Math.floor(seconds / 60);
+            seconds %= 60;
+            return `${days}d ${hours}h ${minutes}m ${seconds}s`;
+        }
+
+        function generateCandidates() {
+            candidates = Array.from({ length: 5 }, () => ({
+                name: getRandomName(),
+                party: getRandomParty(),
+                stat1: getRandomStat(),
+                stat2: getRandomStat(),
+                votes: 0
+            }));
+            renderCandidates();
+        }
+
+        function renderCandidates() {
+            const container = document.getElementById("candidates");
+            container.innerHTML = "";
+            candidates.forEach(candidate => {
+                container.innerHTML += `
+                    <div class="p-4 bg-gray-700 rounded-lg mb-3 flex justify-between items-center">
+                        <div>
+                            <p class="text-lg font-semibold">${candidate.name}</p>
+                            <p class="text-sm text-gray-400">${candidate.party}</p>
+                            <p class="text-sm text-gray-300">Charisma: ${candidate.stat1} | Intelligence: ${candidate.stat2}</p>
+                        </div>
+                        <p class="text-lg font-bold">${candidate.votes} votes</p>
+                    </div>`;
+            });
+        }
+
+        function simulateElection() {
+            totalVotes = 0;
+            timeLeft = 86400;
+            document.getElementById("timeLeft").textContent = formatTime(timeLeft);
+            const population = parseInt(document.getElementById("population").value);
+            let duration = 30 * 1000; 
+            let votesPerTick = Math.ceil(population / (duration / 1));
+
+            interval = setInterval(() => {
+                if (totalVotes >= population || timeLeft <= 0) {
+                    clearInterval(interval);
+                    timeLeft = 0;
+                    document.getElementById("timeLeft").textContent = "Election Ended";
+                    return;
+                }
+                timeLeft -= Math.ceil(86400 / (duration / 1));
+                document.getElementById("timeLeft").textContent = formatTime(timeLeft);
+                let remainingVotes = population - totalVotes;
+                let currentVotes = Math.min(votesPerTick, remainingVotes);
+
+                for (let i = 0; i < currentVotes; i++) {
+                    let candidate = candidates[Math.floor(Math.random() * candidates.length)];
+                    candidate.votes++;
+                    totalVotes++;
+                }
+
+                document.getElementById("totalVotes").textContent = totalVotes;
+                renderCandidates();
+            }, 1);
+        }
+
+        function resetElection() {
+            clearInterval(interval);
+            totalVotes = 0;
+            timeLeft = 86400;
+            document.getElementById("totalVotes").textContent = "0";
+            document.getElementById("timeLeft").textContent = formatTime(timeLeft);
+            generateCandidates();
+        }
+
+        document.getElementById("simulate").addEventListener("click", simulateElection);
+        document.getElementById("reset").addEventListener("click", resetElection);
+
+        generateCandidates();
+    </script>
+</body>
+</html>
