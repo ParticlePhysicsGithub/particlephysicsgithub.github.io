@@ -81,7 +81,7 @@
       text-align: center;
       color: white;
       transition: opacity 0.5s ease;
-      min-height: 10vh; /* Each section takes up one screen height */
+      min-height: 70vh; /* Each section takes up one screen height */
     }
     section:nth-of-type(even) {
       background-color: var(--fifth);
@@ -139,7 +139,7 @@
 
     footer {
       background-color: var(--primary);
-      padding: 10px;
+      padding: 30px;
       text-align: center;
       color: var(--fifth);
       position: fixed;
@@ -164,16 +164,10 @@
       transition: transform 0.3s ease;
       position: relative;
       width: 100%;
-      max-width: 80%;
+      max-width: 500px;
       margin: 30px auto;
-      margin-bottom: 30px;
-    }
+      margin-bottom: 100px;
 
-    .project-panel:nth-of-type(even) {
-      background-color: var(--sixth);
-    }
-    .project-panel:nth-of-type(odd) {
-      background-color: var(--tenth);
     }
     .project-panel:hover {
       transform: scale(1.05);
@@ -210,6 +204,7 @@
     }
   </style>
 <body>
+    
     <div class="intro">
         <h1>ParticlePhysicsGithub</h1>
     </div>
@@ -222,7 +217,7 @@
         <h2>Skills</h2>
         <p>Here are a few skills I've acquired throughout my journey:</p>
         <div class="skills">
-        <div class="skill">CSS</div>
+        <div class="skillish">CSS</div>
         <div class="skillish">JavaScript</div>
         <div class="skillnt">React</div>
         <div class="skillnt">Node.js</div>
@@ -248,52 +243,20 @@
         <h2>Projects</h2>
         <p class="p2">Below are some of the projects I've worked on:</p>
         
-        <!-- Project Panels -->
-        <div class="project-panel">
-        <h3>dice game</h3>
-        <p>roll 'em boi</p>
-        <button class="play-button" onclick="window.location.href='dice.html'">Play</button>
-        </div>
-      
-        <div class="project-panel">
-        <h3>tower defense</h3>
-        <p>mmm yes chlorine</p>
-        <button class="play-button" onclick="window.location.href='tower.html'">Play</button>
-        </div>
+
 
         <div class="project-panel">
-        <h3>voting sim</h3>
-        <p>ur vote matters, vote!</p>
-        <button class="play-button" onclick="window.location.href='votesim.html'">Play</button>
-        </div>
-      
-        <div class="project-panel">
-        <h3>mx terminal</h3>
-        <p>mx go brrrrrrrrrr</p>
-        <button class="play-button" onclick="window.location.href='mxterminal.html'">Play</button>
-        </div>
-
-        <div class="project-panel">
-        <h3>the generic clicker</h3>
-        <p>hehe screenception</p>
-        <button class="play-button" onclick="window.location.href='genericclickerpced.html'">Play</button>
-        </div>
-
-        <div class="project-panel">
-        <h3>miku clicker</h3>
-        <p>senbonzakura~~</p>
-        <button class="play-button" onclick="window.location.href='game1.html'">Play</button>
-        </div>
-
-        <div class="project-panel">
-        <h3>STimer</h3>
-        <p>tick tock its a stopwatch</p>
-        <button class="play-button" onclick="window.location.href='stimer.html'">Play</button>
+        <h3>Clicker Game</h3>
+        <p>click away!</p>
+        <button class="play-button" onclick="window.location.href='game5.html'">Play</button>
         </div>
 
   
 
     </section>
+
+    <!-- Contact Section -->
+    
     <footer>
         <p>&copy; 2025 My Portfolio | <a href="mailto:particlephysicsiguess@gmail.com">Email Me</a></p>
     </footer>
