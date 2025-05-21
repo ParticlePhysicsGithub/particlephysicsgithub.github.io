@@ -1,83 +1,487 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>My Portfolio</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Clicker Game</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bungee+Spice&family=Honk&family=Badeen+Display&family=Edu+QLD+Beginner:wght@400..700&display=swap" rel="stylesheet">
   <style>
     * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
+      user-select: none;
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
     }
 
     body {
-        background-color: grey;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        text-align: center;
-        height: 100vh;
+      font-family: 'Edu QLD Beginner', sans-serif;
+      background: linear-gradient(135deg, #aaaaff , #ff6666);
+      color: linear-gradient(135deg, #ffffff, #cccccc);
+      background-size: 400% 400%;
+      animation: gradientMove 60s ease infinite;
+      color: #fff;
+      height: 100vh;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      position: relative;
     }
 
-    /* Phone Container */
-    .phone-container {
-        position: relative; /* Allows absolute positioning inside */
-        display: inline-block;
+    @keyframes gradientMove {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
     }
 
-    iframe {
-        border-radius: 20px;
-        border: 10px solid white;
-        box-shadow: 0px 20px 30px rgba(0, 0, 0, 0.4);
+    h1 {
+      font-size: 100px;
+      font-weight: 100;
+      transition: transform 0.1s ease-in-out;
     }
 
-    /* Button Container (attached to the left side of the phone) */
-    .button-container {
+    h2 {
+      font-size: 28px;
+      font-weight: 100;
+      margin-bottom: 30px;
+    }
+
+    .upgrade-container {
+      display: flex;
+      gap: 30px;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-top: 20px;
+    }
+
+    
+    .goldupgrade-btn {
+      z-index: 9999;
+      background: rgba(0,0,0,0.3);
+      border-radius: 10px;
+      padding: 20px;
+      cursor: pointer;
+      transition: 0.2s;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.4);
+      text-align: center;
+      min-width: 180px;
+    }
+
+    .goldupgrade-btn:hover {
+      transform: scale(1.05);
+      background: rgba(0,0,0,0.5);
+    }
+
+    .goldupgrade-btn.disabled {
+        pointer-events: none;
+        opacity: 0.4;
+        transform: none !important;
+    }
+
+    .upgrade-btn {
+      z-index: 9999;
+      background: rgba(0,0,0,0.3);
+      border-radius: 10px;
+      padding: 20px;
+      cursor: pointer;
+      transition: 0.2s;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.4);
+      text-align: center;
+      min-width: 180px;
+    }
+
+    .upgrade-btn:hover {
+      transform: scale(1.05);
+      background: rgba(0,0,0,0.5);
+    }
+
+    .upgrade-btn.disabled {
+        pointer-events: none;
+        opacity: 0.4;
+        transform: none !important;
+    }
+
+
+    .upgrade-cost {
+      font-size: 20px;
+      margin-top: 10px;
+    }
+
+    .floating-text {
+      position: absolute;
+      font-size: 24px;
+      pointer-events: none;
+      animation: floatUp 2s ease forwards;
+      color: #fff;
+      text-shadow: 1px 1px 5px rgba(0,0,0,0.5);
+    }
+
+    #top-progress-wrapper {
         position: absolute;
-        left: -5px; /* Moves buttons next to the left edge of the phone */
-        top: 25%;
-        transform: translateY(-50%); /* Center vertically */
-        display: flex;
-        flex-direction: column;
-        gap: 10px;
+        top: 0;
+        left: 0;
+        width: 100%;
+        z-index: 10;
+        text-align: center;
+        padding-top: 12px;
     }
 
-    .powerbutton, .volup, .voldown {
-        background-color: #FFFFFF;
-        border-radius: 20px;
-        width: 10px;
+    #top-progress-container {
+        width: 100%;
+        height: 12px;
+        background: rgba(255, 255, 255, 0.1);
+        overflow: hidden;
     }
 
-    .powerbutton {
-        height: 80px;
-        cursor: pointer;
+    #top-progress-bar {
+        height: 100%;
+        width: 0%;
+        background: linear-gradient(to right, #ffeb3b, #00ff90);
+        transition: width 0.3s ease;
     }
 
-    .volup, .voldown {
-        height: 40px;
+    #top-progress-bar.glow {
+        animation: glowPulse 1s infinite alternate;
     }
 
-    .powerbutton:hover {
-        background-color: red;
+    @keyframes glowPulse {
+        0% {
+            box-shadow: 0 0 10px #00ff90, 0 0 20px #ffeb3b;
+        }
+        100% {
+            box-shadow: 0 0 20px #00ff90, 0 0 40px #ffeb3b;
+        }
+    }
+
+    #top-progress-label {
+        color: white;
+        font-size: 14px;
+        margin-top: 6px;
+        font-weight: bold;
+        text-shadow: 1px 1px 3px rgba(0,0,0,0.4);
+    }
+
+    .overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5); /* Black color with 50% opacity */
+      z-index: 9999; /* Ensure it's on top of other elements */
+      display: flex;
+      
+      flex-wrap: wrap;
+      justify-content: center;
+      text-align: center;
+     
+    }
+
+    .fadebar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.1) , rgba(255, 255, 255, 0.5)); ;
+
+      
+      z-index: 0; /* Ensure it's on top of other elements */
+      display: flex;
+      
+      flex-wrap: wrap;
+      justify-content: center;
+      text-align: center;
+     
+    }
+
+
+
+    @keyframes floatUp {
+      0% {
+        opacity: 1;
+        transform: translateY(0) translateX(0) scale(1);
+      }
+      100% {
+        opacity: 0;
+        text-shadow: 1px 1px 15px rgba(0,0,0, 1);
+        transform: translateY(-100px) translateX(var(--x)) scale(1.25);
+      }
     }
   </style>
 </head>
-<body>
+<body onclick="handleClick(event)">
+  
+  <div id="overlay" class="overlay">
+    <h1>Money Compression Trade</h1>
+    <div class="upgrade-btn" id="upgrade-btn" onclick="cont(event)">
+      <strong>&lt;trade all money for gold&gt;</strong>
+      
+    </div>
+  </div>
 
-    <!-- Phone Container -->
-    <div class="phone-container">
-        <!-- Button Container (sticks to left of phone) -->
-        <div class="button-container">
-            <div class="powerbutton" onclick="window.close();"></div>
-            <div class="volup"></div>
-            <div class="voldown"></div>
-        </div>
-        
-        <!-- Phone (iframe) -->
-        <iframe src="game5.html" width="400" height="800"></iframe>
+  <div id="top-progress-wrapper" >
+    <div id="top-progress-container">
+        <div id="top-progress-bar"></div>
+    </div>
+    <div id="top-progress-label">$0 / $200,000</div>
+  </div>
+
+
+  <h1 id="score">$0</h1>
+  <h2 id="ruby">0 Gold</h2>
+  <h2 id="cpccps">1 Click Multi | 0 CPS | Crit Chance: 0%</h2>
+
+  <div class="upgrade-container">
+    <div class="upgrade-btn" id="upg-btn" onclick="buyUpgrade(event)">
+      <strong>+1 Score per Click</strong>
+      <div class="upgrade-cost">Cost: <span id="upgrade-cost">50</span></div>
+    </div>
+    <div class="upgrade-btn" id="cps-btn" onclick="buyCPS(event)">
+      <strong>+1 Autoclicker</strong>
+      <div class="upgrade-cost">Cost: <span id="cps-cost">100</span></div>
+    </div>
+    <div class="upgrade-btn" id="crit-btn" onclick="buyCrit(event)">
+      <strong>+5% Crit Chance</strong>
+      <div class="upgrade-cost">Cost: <span id="crit-cost">200</span></div>
+    </div>
+    <div class="upgrade-btn" id="speed-btn" onclick="buyCpsSpeed(event)">
+      <strong>-0.05s Tick Speed</strong>
+      <div class="upgrade-cost">Cost: <span id="speed-cost">300</span></div>
+    </div>
+    <div class="goldupgrade-btn" id="cpcultra-btn" onclick="buyCpcUltra(event)">
+      <strong>+100 Score per Click</strong>
+      <div class="upgrade-cost">Cost: <span id="cpcultra-cost">1</span> Gold</div>
+    </div>
+    <div class="goldupgrade-btn" id="cpsultra-btn" onclick="buyCpsUltra(event)">
+      <strong>+100 Autoclicker</strong>
+      <div class="upgrade-cost">Cost: <span id="cpsultra-cost">5</span> Gold</div>
     </div>
 
+    <div class="fadebar"></div>
+    
+    
+  </div>
+
+  <script>
+    let score = 1;
+    let gold = 0;
+    let CPC = 1;
+    let CPS = 0;
+    let critChance = 0;
+    
+
+    let upgradeCost = 50, upgradeTimes = 0;
+    let cpsCost = 100, cpsTimes = 0;
+    let critCost = 200, critTimes = 0;
+    let speedCost = 300, speedTimes = 0;
+    let cpcgoldCost = 1;
+    let cpsgoldCost = 5;
+    let quota = 200000;
+
+    let cpsInterval = 1000;
+    let cpsIntervalID;
+    let gameIntervalID;
+
+    function handleClick(e) {
+      let isCrit = Math.random() < critChance;
+      let isSuperCrit = Math.random() < critChance / 10;
+      
+      let bonus = isCrit ? CPC * 2 + (isSuperCrit ? CPC * 20  : 0) : CPC;
+      
+      score += bonus;
+      animateScore(e.clientX, e.clientY, `+${bonus}`, isCrit, isSuperCrit);
+      updateDisplay();
+    }
+
+    function animateScore(x, y, text, crit, supercrit) {
+      const float = document.createElement('div');
+      float.className = 'floating-text';
+      float.textContent = text;
+      let dir = Math.floor(Math.random() * 91) - 45;
+      float.style.left = `${x}px`;
+      float.style.top = `${y}px`;
+      float.style.setProperty('--x', `${dir}px`);
+      if (crit) float.style.color = '#ffeb3b';
+      if (supercrit) float.style.color = '#ffac3b';
+      
+      document.body.appendChild(float);
+      setTimeout(() => float.remove(), 1000);
+    }
+
+    function buyUpgrade(e) {
+      e.stopPropagation();
+      if (score >= upgradeCost) {
+        score -= upgradeCost;
+        upgradeTimes++;
+        CPC++;
+        upgradeCost = Math.floor(upgradeCost * 1.5);
+        updateDisplay();
+      }
+    }
+
+    function buyCpcUltra(e) {
+      e.stopPropagation();
+      if (gold >= cpcgoldCost) {
+        gold -= cpcgoldCost;
+      
+        CPC += 100;
+        
+        updateDisplay();
+      }
+    }
+
+    function cont(e) {
+      disableOverlay();
+      //if (gameIntervalID) clearInterval(gameIntervalID);
+    }
+
+    function buyCPS(e) {
+      e.stopPropagation();
+      if (score >= cpsCost) {
+        score -= cpsCost;
+        cpsTimes++;
+        CPS++;
+        cpsCost = Math.floor(cpsCost * 1.6); // Update CPS cost properly
+        restartCpsInterval();
+        updateDisplay();
+      }
+    }
+
+    function buyCpsUltra(e) {
+      e.stopPropagation();
+      if (gold >= cpsgoldCost) {
+        gold -= cpsgoldCost;
+      
+        CPS += 100;
+        
+        restartCpsInterval();
+        updateDisplay();
+      }
+    }
+
+    function buyCrit(e) {
+      e.stopPropagation();
+      if (score >= critCost) {
+        score -= critCost;
+        critTimes++;
+        critChance += 0.05;
+        critCost = Math.floor(critCost * 1.7);
+        updateDisplay();
+      }
+    }
+
+    function buyCpsSpeed(e) {
+      e.stopPropagation();
+      if (score >= speedCost) {
+        score -= speedCost;
+        speedTimes++;
+        cpsInterval = Math.max(100, cpsInterval * 0.95); // minimum cap
+        speedCost = Math.floor(speedCost * 1.8);
+        restartCpsInterval();
+        updateDisplay();
+      }
+    }
+
+    function restartCpsInterval() {
+      if (cpsIntervalID) clearInterval(cpsIntervalID);
+      cpsIntervalID = setInterval(() => {
+        score += CPS;
+        updateDisplay();
+      }, cpsInterval);
+    }
+
+    // Get the overlay element by its id
+    var overlay = document.getElementById("overlay");
+
+    // Function to enable the overlay
+    function enableOverlay() {
+      overlay.style.display = "block";
+    }
+
+    // Function to disable the overlay
+    function disableOverlay() {
+      overlay.style.display = "none";
+    }
+
+    disableOverlay();
+
+    gameIntervalID = setInterval(() => {
+      for (let i = 1; score >= quota; i++) {
+        if (score >= quota) {
+          enableOverlay();
+          score -= quota;
+          gold += 1;
+          quota *= 1.25;
+        
+        }
+      }
+    },1000);
+    
+
+    function updateDisplay() {
+        quota = Math.floor(quota);
+        document.getElementById("score").textContent = Math.floor(score).toLocaleString() + "$";
+        document.getElementById("ruby").textContent = Math.floor(gold).toLocaleString() + " Gold";
+        document.getElementById("cpccps").textContent = `${CPC} Click Multi | ${CPS} CPT (1 tick = ${(cpsInterval / 1000).toFixed(2)}s) | Crit Chance: ${(critChance * 100).toFixed(1)}%`;
+
+        document.getElementById("upgrade-cost").textContent = upgradeCost;
+        document.getElementById("cpcultra-cost").textContent = cpcgoldCost;
+        document.getElementById("cpsultra-cost").textContent = cpsgoldCost;
+        document.getElementById("cps-cost").textContent = cpsCost;
+        document.getElementById("crit-cost").textContent = critCost;
+        document.getElementById("speed-cost").textContent = speedCost;
+
+        toggleUpgradeState("upg-btn", score >= upgradeCost);
+        toggleUpgradeState("cpcultra-btn", gold >= cpcgoldCost);
+        toggleUpgradeState("cps-btn", score >= cpsCost);
+        toggleUpgradeState("crit-btn", score >= critCost);
+        toggleUpgradeState("speed-btn", score >= speedCost);
+        toggleUpgradeState("cpsultra-btn", gold >= cpsgoldCost);
+        
+        updateTopProgressBar();
+        checkPrestige();
+
+
+    }
+
+
+
+    function updateTopProgressBar() {
+        
+        const progress = Math.min(score / quota, 1);
+        const progressBar = document.getElementById("top-progress-bar");
+
+        progressBar.style.width = `${progress * 100}%`;
+
+        // Add glow when over 90%
+        
+        progressBar.classList.add("glow");
+        
+          
+        
+
+        // Update label
+        document.getElementById("top-progress-label").textContent =
+            `Money needed for Compression Trade: $${Math.floor(score).toLocaleString()} / $${quota.toLocaleString()}`;
+    }
+
+
+
+    function toggleUpgradeState(id, canAfford) {
+        const btn = document.getElementById(id);
+        btn.classList.toggle("disabled", !canAfford);
+    }
+
+    
+
+
+    
+    updateDisplay();
+    restartCpsInterval(); // start auto click loop
+  </script>
 </body>
 </html>
