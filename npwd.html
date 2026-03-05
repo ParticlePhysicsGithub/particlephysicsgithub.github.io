@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>New Phone Who Dis</title>
+    <script src="https://unpkg.com/peerjs@1.5.2/dist/peerjs.min.js"></script>
+    <style>
+        :root {
+            --primary: #2563eb;
+            --secondary: #3b82f6;
+            --bg: #0f172a;
+            --card: #1e293b;
+            --text: #f8fafc;
+            --accent: #f59e0b;
+            --success: #10b981;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, sans-serif;
+            background-color: var(--bg);
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            color: var(--text);
+            overflow-x: hidden;
+        }
+
+        #app {
+            width: 100%;
+            max-width: 500px;
+            background: var(--card);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5);
+        }
+
+        .header {
+            background: var(--primary);
+            color: white;
+            padding: 1.5rem;
+            text-align: center;
+            font-size: 1.5rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .content {
+            padding: 20px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .screen { display: none; }
+        .active { display: flex; flex-direction: column; animation: slideUp 0.3s ease-out; }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Message Visuals */
+        .inbox-bubble {
+            background: #334155;
+            border-radius: 20px;
+            border-bottom-left-radius: 4px;
+            padding: 1.2rem;
+            margin: 1rem 0;
+            position: relative;
+            border: 1px solid #475569;
+        }
+
+        .bubble-label {
+            position: absolute;
+            top: -25px;
+            left: 5px;
+            font-size: 0.75rem;
+            font-weight: bold;
+            color: var(--secondary);
+        }
+
+        /* Buttons & Inputs */
+        .btn {
+            display: block;
+            width: 100%;
+            padding: 1rem;
+            margin-bottom: 0.75rem;
+            border: none;
+            background: #334155;
+            color: white;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: all 0.2s;
+        }
+
+        .btn:hover { background: #475569; }
+        .btn-main { background: var(--primary); text-align: center; }
+        .btn-main:hover { background: var(--secondary); transform: scale(1.02); }
+        .btn-success { background: var(--success); }
+
+        input {
+            width: 100%;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            border: 2px solid #334155;
+            background: #0f172a;
+            color: white;
+            border-radius: 12px;
+            box-sizing: border-box;
+        }
+
+        /* Room Screen Elements */
+        .room-code-display {
+            background: #0f172a;
+            padding: 2rem;
+            border-radius: 15px;
+            text-align: center;
+            margin-bottom: 2rem;
+            border: 2px dashed var(--primary);
+        }
+
+        .code-text {
+            font-size: 3rem;
+            font-weight: 900;
+            color: var(--accent);
+            letter-spacing: 5px;
+        }
+
+        .player-pill {
+            background: #334155;
+            padding: 10px 15px;
+            border-radius: 50px;
+            margin-bottom: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        /* Score Panel */
+        .score-panel {
+            margin-top: auto;
+            background: #0f172a;
+            border-radius: 12px;
+            padding: 1rem;
+            border: 1px solid #334155;
+        }
+
+        .score-entry {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.25rem 0;
+            font-size: 0.9rem;
+        }
+
+        .judge-indicator {
+            color: var(--accent);
+            font-size: 0.65rem;
+            font-weight: bold;
+            border: 1px solid var(--accent);
+            padding: 1px 4px;
+            border-radius: 4px;
+        }
+
+        .hidden { display: none; }
+    </style>
+</head>
+<body>
+
+<div id="app">
+    <div class="header">New Phone Who Dis</div>
+
+    <!-- 1. MAIN MENU SCREEN -->
+    <div id="menu-screen" class="content screen active">
+        <h2 style="text-align:center">Play Online</h2>
+        <input type="text" id="username" placeholder="Enter Your Name">
+        
+        <button class="btn btn-main" onclick="startSinglePlayer()">Practice vs Bots</button>
+        <div style="text-align:center; margin: 15px; opacity: 0.5;">— OR —</div>
+        
+        <button class="btn btn-main" style="background:#475569;" onclick="hostGame()">Host New Room</button>
+        
+        <div style="display:flex; gap:10px; margin-top:10px;">
+            <input type="text" id="join-code-input" placeholder="Room Code" style="margin-bottom:0; flex:1;">
+            <button class="btn btn-main" style="width:auto; margin-bottom:0;" onclick="joinGame()">Join</button>
+        </div>
+        <p id="menu-status" style="font-size: 0.8rem; color: #94a3b8; text-align: center; margin-top: 15px;"></p>
+    </div>
+
+    <!-- 2. ROOM LOBBY SCREEN -->
+    <div id="room-screen" class="content screen">
+        <div class="room-code-display">
+            <div style="font-size: 0.8rem; opacity: 0.7; margin-bottom: 10px;">ROOM CODE</div>
+            <div class="code-text" id="display-room-code">-----</div>
+        </div>
+
+        <h3>Players Joined</h3>
+        <div id="lobby-player-list" style="flex-grow: 1;">
+            <!-- Players appear here -->
+        </div>
+
+        <div id="host-controls" class="hidden">
+            <button class="btn btn-success" onclick="beginMatch()">Start Game</button>
+        </div>
+        <div id="client-waiting" style="text-align: center; padding: 20px; opacity: 0.7;">
+            Waiting for host to start...
+        </div>
+    </div>
+
+    <!-- 3. GAMEPLAY SCREEN -->
+    <div id="game-screen" class="content screen">
+        <div id="judge-status" style="font-size: 0.9rem; margin-bottom: 10px; color: var(--secondary); font-weight: bold;"></div>
+        
+        <div class="inbox-bubble">
+            <div class="bubble-label">INCOMING TEXT</div>
+            <div id="prompt-display" style="font-size: 1.1rem;">...</div>
+        </div>
+
+        <div id="options-container" style="flex-grow: 1;"></div>
+
+        <div class="score-panel">
+            <div id="score-list"></div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const prompts = [
+        "Mom: 'Why is there a goat in the bathtub?'",
+        "Teacher: 'I found your hidden stash of candy in the library.'",
+        "Unknown: 'The drop is complete. The squirrels have the package.'",
+        "Coach: 'Why are you trying to play soccer with a bowling ball?'",
+        "Principal: 'See me after school. Bring a giant spoon.'",
+        "Boss: 'The office isn't for nap time. Get out of the supply closet.'",
+        "Dad: 'I accidentally bought 400 loaves of bread. Come help me make sandwiches.'"
+    ];
+
+    const replies = [
+        "New phone who dis?",
+        "I have a doctor's note for my behavior.",
+        "It was for a science project, I swear.",
+        "That wasn't me, it was my evil twin.",
+        "I thought this was a Wendy's.",
+        "Instructions unclear, I am now a professional dancer.",
+        "My lawyer says I shouldn't talk about this.",
+        "Wait, this isn't the pizza delivery number?",
+        "I'm actually doing a social experiment.",
+        "Is it too late to say sorry?"
+    ];
+
+    let peer = null;
+    let conn = null;
+    let connections = [];
+    let players = [];
+    let isHost = false;
+    let myName = "";
+    let judgeIndex = 0;
+
+    function showScreen(id) {
+        document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+        document.getElementById(id).classList.add('active');
+    }
+
+    // --- Multiplayer Hosting ---
+    function hostGame() {
+        myName = document.getElementById('username').value || "Host";
+        if (!myName) return alert("Please enter a name first!");
+
+        peer = new Peer();
+        
+        peer.on('open', (id) => {
+            isHost = true;
+            const shortCode = id.substring(0, 5).toUpperCase();
+            document.getElementById('display-room-code').innerText = shortCode;
+            players.push({ name: myName, id: id, score: 0 });
+            
+            showScreen('room-screen');
+            document.getElementById('host-controls').classList.remove('hidden');
+            document.getElementById('client-waiting').classList.add('hidden');
+            updateLobbyUI();
+        });
+
+        peer.on('connection', (c) => {
+            connections.push(c);
+            c.on('data', (data) => {
+                if (data.type === 'JOIN') {
+                    players.push({ name: data.name, id: c.peer, score: 0 });
+                    broadcast({ type: 'SYNC_PLAYERS', players: players });
+                    updateLobbyUI();
+                }
+            });
+        });
+    }
+
+    // --- Multiplayer Joining ---
+    function joinGame() {
+        const code = document.getElementById('join-code-input').value.toUpperCase();
+        myName = document.getElementById('username').value || "Guest";
+        
+        if (!code || !myName) return alert("Enter both name and room code!");
+
+        peer = new Peer();
+        peer.on('open', (id) => {
+            // Note: In local P2P with PeerJS, you usually need the full ID.
+            // For a single-file demo, we assume the user provides the ID or we'd use a server.
+            conn = peer.connect(code.toLowerCase()); 
+            
+            conn.on('open', () => {
+                conn.send({ type: 'JOIN', name: myName });
+                document.getElementById('display-room-code').innerText = code;
+                showScreen('room-screen');
+            });
+
+            conn.on('data', (data) => {
+                if (data.type === 'SYNC_PLAYERS') {
+                    players = data.players;
+                    updateLobbyUI();
+                }
+                if (data.type === 'START_GAME') {
+                    startGameplay();
+                }
+            });
+        });
+    }
+
+    function broadcast(data) {
+        connections.forEach(c => c.send(data));
+    }
+
+    function updateLobbyUI() {
+        const list = document.getElementById('lobby-player-list');
+        list.innerHTML = players.map(p => `
+            <div class="player-pill">
+                <span>${p.name}</span>
+                <span style="font-size: 0.7rem; opacity: 0.5;">READY</span>
+            </div>
+        `).join('');
+    }
+
+    function beginMatch() {
+        broadcast({ type: 'START_GAME' });
+        startGameplay();
+    }
+
+    function startGameplay() {
+        showScreen('game-screen');
+        renderRound();
+    }
+
+    function renderRound() {
+        const judge = players[judgeIndex];
+        document.getElementById('judge-status').innerText = `${judge.name} is Judging`;
+        document.getElementById('prompt-display').innerText = prompts[Math.floor(Math.random() * prompts.length)];
+        
+        const container = document.getElementById('options-container');
+        container.innerHTML = "";
+
+        const hand = [...replies].sort(() => 0.5 - Math.random()).slice(0, 4);
+        
+        hand.forEach(text => {
+            const b = document.createElement('button');
+            b.className = "btn";
+            b.innerText = text;
+            b.onclick = () => {
+                // Simplified scoring for the demo
+                players[0].score++; // Give local player a point for testing
+                judgeIndex = (judgeIndex + 1) % players.length;
+                renderRound();
+            };
+            container.appendChild(b);
+        });
+
+        const scoreList = document.getElementById('score-list');
+        scoreList.innerHTML = players.map((p, i) => `
+            <div class="score-entry">
+                <span>${p.name} ${i === judgeIndex ? '<span class="judge-indicator">JUDGE</span>' : ''}</span>
+                <span>${p.score}</span>
+            </div>
+        `).join('');
+    }
+
+    // --- Practice Mode ---
+    function startSinglePlayer() {
+        myName = document.getElementById('username').value || "You";
+        players = [
+            { name: myName, score: 0 },
+            { name: "Bot Brian", score: 0 },
+            { name: "Bot Brenda", score: 0 }
+        ];
+        startGameplay();
+    }
+</script>
+</body>
+</html>
